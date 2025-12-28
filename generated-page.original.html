@@ -1,0 +1,1228 @@
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkLens - AI Bookmarking</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+gray: {
+50: '#F9FAFB',
+100: '#F3F4F6',
+200: '#E5E7EB',
+300: '#D1D5DB',
+400: '#9CA3AF',
+500: '#6B7280',
+600: '#4B5563',
+700: '#374151',
+800: '#1F2937',
+900: '#111827',
+},
+linklens: {
+mint: '#A7F3D0',
+sky: '#BAE6FD',
+violet: '#DDD6FE',
+yellow: '#FDE68A'
+}
+},
+animation: {
+'spin-slow': 'spin 3s linear infinite',
+'blob': 'blob 7s infinite',
+'float': 'float 6s ease-in-out infinite',
+},
+keyframes: {
+blob: {
+'0%': { transform: 'translate(0px, 0px) scale(1)' },
+'33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+'66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+'100%': { transform: 'translate(0px, 0px) scale(1)' },
+},
+float: {
+'0%, 100%': { transform: 'translateY(0)' },
+'50%': { transform: 'translateY(-10px)' },
+}
+}
+}
+}
+}
+</script>
+<style>
+html { scroll-behavior: smooth; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.mesh-gradient-text {
+background-clip: text;
+-webkit-background-clip: text;
+color: transparent;
+}
+</style>
+</head>
+  <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start p-4 sm:p-6 lg:p-8 font-sans antialiased text-gray-900 selection:bg-[#BAE6FD] selection:text-gray-900">
+    <!-- Main Container Card -->
+    <div class="w-full max-w-[1400px] bg-white rounded-[2rem] shadow-2xl overflow-hidden relative border border-gray-200/50 ring-1 ring-gray-200/50 pb-0">
+      <!-- 5-Color Mesh Gradient Background (Hero Only) -->
+      <div class="absolute inset-0 z-0 bg-white h-[900px]"></div>
+      <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none h-[900px]">
+        <div class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-[#A7F3D0] opacity-40 blur-[100px] animate-blob mix-blend-multiply"></div>
+        <div class="absolute top-[0%] -right-[10%] w-[50%] h-[60%] rounded-full bg-[#BAE6FD] opacity-40 blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply"></div>
+        <div class="absolute top-[30%] right-[15%] w-[40%] h-[40%] rounded-full bg-[#DDD6FE] opacity-40 blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply"></div>
+        <div class="absolute inset-0 bg-white/30 backdrop-blur-[1px]"></div>
+      </div>
+
+      <!-- Navbar -->
+      <nav class="relative z-20 flex items-center justify-between px-6 py-6 md:px-10">
+        <div class="flex items-center gap-2">
+          <iconify-icon icon="solar:bookmark-square-minimalistic-bold-duotone" class="text-gray-900 text-3xl"></iconify-icon>
+          <span class="text-xl font-medium tracking-tight">LinkLens</span>
+        </div>
+
+        <div class="hidden md:flex items-center gap-1 bg-white/40 backdrop-blur-md border border-white/40 rounded-full px-2 py-1.5 shadow-sm">
+          <a href="#" class="text-sm font-normal text-gray-600 hover:text-gray-900 px-4 py-1.5 rounded-full hover:bg-white/60 transition-colors">
+            Features
+          </a>
+          <a href="#" class="text-sm font-normal text-gray-600 hover:text-gray-900 px-4 py-1.5 rounded-full hover:bg-white/60 transition-colors">
+            Pricing
+          </a>
+          <a href="#" class="text-sm font-normal text-gray-600 hover:text-gray-900 px-4 py-1.5 rounded-full hover:bg-white/60 transition-colors">
+            Chrome Extension
+          </a>
+        </div>
+
+        <div class="hidden md:flex items-center gap-3">
+          <button class="text-sm font-medium text-gray-700 bg-white/60 border border-gray-200/60 px-4 py-2 rounded-lg hover:bg-white transition-colors shadow-sm">
+            Sign In
+          </button>
+          <button class="text-sm font-medium text-white bg-gray-900 border border-gray-900 px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors shadow-lg shadow-gray-900/10">
+            Get Started Free
+          </button>
+        </div>
+        <button class="md:hidden p-2 text-gray-600">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </nav>
+
+      <!-- Hero Content -->
+      <div class="relative z-10 flex flex-col items-center pt-12 pb-24 text-center px-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 border border-white shadow-sm mb-8 backdrop-blur-sm">
+          <span class="flex h-2 w-2 rounded-full bg-[#A7F3D0] ring-1 ring-emerald-200"></span>
+          <span class="text-xs font-medium text-gray-600 tracking-wide">
+            Trusted by
+            <span class="text-gray-900 font-semibold">500+</span>
+            students and researchers
+          </span>
+        </div>
+
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tight text-gray-900 mb-6 max-w-4xl leading-[1.1]">
+          Never lose a link again.
+          <br class="hidden md:block">
+          Find it in seconds with
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#A7F3D0] via-[#BAE6FD] to-[#DDD6FE]">
+            AI
+          </span>
+          .
+        </h1>
+
+        <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-10 font-normal leading-relaxed">
+          The smart bookmarking tool for students, researchers, and knowledge
+          workers. Save, organize, and rediscover your research with AI-powered
+          search.
+        </p>
+
+        <div class="flex flex-col items-center gap-6 mb-16">
+          <button class="group bg-gray-900 text-white text-base font-medium px-8 py-3.5 rounded-xl shadow-xl shadow-gray-900/20 hover:bg-gray-800 hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 flex items-center gap-2">
+            Get Started Free
+            <iconify-icon icon="solar:arrow-right-linear" class="group-hover:translate-x-1 transition-transform"></iconify-icon>
+          </button>
+          <div class="text-sm font-medium text-gray-500">
+            No credit card required • 100 bookmarks free forever
+          </div>
+        </div>
+
+        <!-- Browser Mockup -->
+        <div class="relative w-full max-w-5xl mx-auto perspective-1000 group">
+          <div class="relative bg-white rounded-t-xl rounded-b-lg shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-gray-200/80 overflow-hidden transform transition-transform duration-700">
+            <div class="bg-gray-50/80 border-b border-gray-200 px-4 py-3 flex items-center gap-4 backdrop-blur-sm">
+              <div class="flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-400/80 border border-red-500/50"></div>
+                <div class="w-3 h-3 rounded-full bg-amber-400/80 border border-amber-500/50"></div>
+                <div class="w-3 h-3 rounded-full bg-emerald-400/80 border border-emerald-500/50"></div>
+              </div>
+              <div class="flex-1 flex justify-center">
+                <div class="bg-white border border-gray-200 text-gray-400 text-xs py-1.5 px-32 rounded-md flex items-center gap-2 shadow-sm">
+                  <iconify-icon icon="solar:lock-keyhole-minimalistic-bold" class="text-gray-300"></iconify-icon>
+                  app.linklens.ai
+                </div>
+              </div>
+            </div>
+            <div class="w-full h-[400px] md:h-[550px] bg-gray-50 flex flex-col items-center justify-center text-gray-400 gap-4">
+              <div class="w-24 h-24 rounded-2xl bg-white border border-gray-200 flex items-center justify-center shadow-sm">
+                <iconify-icon icon="solar:gallery-wide-linear" class="text-4xl text-gray-300"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logos -->
+        <div class="mt-20 w-full text-center relative z-10">
+          <p class="text-sm font-medium text-gray-400 mb-8 tracking-wide">
+            Backed by the best
+          </p>
+          <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+            <div class="flex items-center gap-2 group cursor-pointer">
+              <iconify-icon icon="simple-icons:loom" width="24" class="text-gray-900"></iconify-icon>
+              <span class="text-lg font-semibold text-gray-700 font-sans tracking-tight">
+                Lumina
+              </span>
+            </div>
+            <div class="flex items-center gap-2 group cursor-pointer">
+              <iconify-icon icon="simple-icons:stripe" width="24" class="text-gray-900"></iconify-icon>
+              <span class="text-lg font-semibold text-gray-700 font-sans tracking-tight">
+                Synergy
+              </span>
+            </div>
+            <div class="flex items-center gap-2 group cursor-pointer">
+              <iconify-icon icon="simple-icons:notion" width="24" class="text-gray-900"></iconify-icon>
+              <span class="text-lg font-semibold text-gray-700 font-sans tracking-tight">
+                Enigma
+              </span>
+            </div>
+            <div class="flex items-center gap-2 group cursor-pointer">
+              <iconify-icon icon="simple-icons:airbnb" width="24" class="text-gray-900"></iconify-icon>
+              <span class="text-lg font-semibold text-gray-700 font-sans tracking-tight">
+                Apex
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: HOW IT WORKS -->
+      <section class="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white border-t border-gray-100 overflow-hidden">
+        <div class="max-w-[1400px] mx-auto relative z-10">
+          <div class="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
+            <!-- Content LEFT -->
+            <div class="flex flex-col gap-6 order-1">
+              <!-- Badge -->
+              <div class="inline-flex self-start items-center gap-2 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm transition-shadow hover:shadow-md cursor-default mb-2">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                </span>
+                <span class="text-xs font-semibold text-gray-600 tracking-wider">
+                  SIMPLE. SMART. SEAMLESS.
+                </span>
+              </div>
+
+              <!-- Headings -->
+              <div>
+                <h2 class="text-4xl md:text-5xl font-medium tracking-tight text-gray-900 mb-4 leading-[1.1]">
+                  Save, organize, and
+                  <br>
+                  rediscover in three steps
+                </h2>
+                <p class="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
+                  Let AI do the heavy lifting while you focus on your research.
+                </p>
+              </div>
+
+              <!-- 3 Steps Row (Columns) -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-10">
+                <!-- Step 1 -->
+                <div class="flex flex-col gap-4 group">
+                  <div class="w-[60px] h-[60px] rounded-full bg-[#A7F3D0] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-emerald-200/50">
+                    <i data-lucide="bookmark-plus" class="w-7 h-7 text-emerald-900 stroke-[1.5]"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-semibold text-gray-900 mb-2">
+                      Save in one click
+                    </h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                      Bookmark any page with our Chrome extension. Add to
+                      collections, write notes, and let AI suggest tags
+                      instantly.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col gap-4 group">
+                  <div class="w-[60px] h-[60px] rounded-full bg-[#DDD6FE] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-violet-200/50">
+                    <i data-lucide="sparkles" class="w-7 h-7 text-violet-900 stroke-[1.5]"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-semibold text-gray-900 mb-2">
+                      AI organizes automatically
+                    </h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                      Smart tags, collection suggestions, and semantic indexing
+                      happen in the background. No manual filing required.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col gap-4 group">
+                  <div class="w-[60px] h-[60px] rounded-full bg-[#BAE6FD] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-sky-200/50">
+                    <i data-lucide="search" class="w-7 h-7 text-sky-900 stroke-[1.5]"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-semibold text-gray-900 mb-2">
+                      Find anything in seconds
+                    </h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                      Search by meaning with semantic search, or click 'More
+                      like this' to discover similar bookmarks instantly.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Content RIGHT (Dashboard Visual) -->
+            <div class="relative order-2 h-full min-h-[500px] flex items-center justify-center">
+              <!-- Blobs -->
+              <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-gray-100 via-gray-50 to-white rounded-full blur-3xl opacity-50 -z-10"></div>
+
+              <!-- Dashboard Container -->
+              <div class="w-full relative bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden transform hover:scale-[1.01] transition-transform duration-500">
+                <!-- Title Bar -->
+                <div class="h-10 border-b border-gray-100 flex items-center px-4 gap-2 bg-gray-50/50">
+                  <div class="flex gap-1.5">
+                    <div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
+                  </div>
+                  <div class="ml-4 flex-1 flex justify-center">
+                    <div class="h-5 w-48 bg-gray-100 rounded-md"></div>
+                  </div>
+                </div>
+
+                <div class="flex h-[450px]">
+                  <!-- Sidebar -->
+                  <div class="w-48 border-r border-gray-100 bg-gray-50/30 p-4 flex flex-col gap-1 hidden sm:flex">
+                    <div class="flex items-center gap-2 px-2 py-2 text-sm font-medium text-gray-900 bg-gray-100/80 rounded-md">
+                      <i data-lucide="layout-grid" class="w-4 h-4 text-gray-500 stroke-[1.5]"></i>
+                      All Bookmarks
+                    </div>
+                    <div class="flex items-center gap-2 px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+                      <i data-lucide="star" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+                      Favorites
+                    </div>
+                    <div class="flex items-center gap-2 px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+                      <i data-lucide="clock" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+                      Read Later
+                    </div>
+
+                    <div class="mt-6 text-xs font-semibold text-gray-400 px-2 uppercase tracking-wider">
+                      Collections
+                    </div>
+                    <div class="flex items-center gap-2 px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+                      <span class="w-2 h-2 rounded-full bg-[#A7F3D0]"></span>
+                      Research
+                    </div>
+                    <div class="flex items-center gap-2 px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+                      <span class="w-2 h-2 rounded-full bg-[#DDD6FE]"></span>
+                      Inspiration
+                    </div>
+                    <div class="flex items-center gap-2 px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+                      <span class="w-2 h-2 rounded-full bg-[#BAE6FD]"></span>
+                      Dev Tools
+                    </div>
+                  </div>
+
+                  <!-- Main Content -->
+                  <div class="flex-1 p-6 bg-white overflow-hidden flex flex-col">
+                    <!-- Search Header -->
+                    <div class="flex items-center justify-between mb-8">
+                      <h3 class="text-xl font-semibold text-gray-900">
+                        All Bookmarks
+                      </h3>
+                      <div class="flex items-center gap-3">
+                        <div class="relative">
+                          <i data-lucide="search" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+                          <input disabled="" type="text" placeholder="Search..." class="pl-9 pr-4 py-1.5 text-sm border border-gray-200 rounded-lg w-48 bg-gray-50">
+                        </div>
+                        <button class="p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50">
+                          <i data-lucide="plus" class="w-4 h-4 text-gray-600 stroke-[1.5]"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Cards Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <!-- Card 1 -->
+                      <div class="p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group/card cursor-pointer">
+                        <div class="flex items-start justify-between mb-3">
+                          <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                            <i data-lucide="file-code-2" class="w-5 h-5 stroke-[1.5]"></i>
+                          </div>
+                          <div class="opacity-0 group-hover/card:opacity-100 transition-opacity">
+                            <i data-lucide="more-horizontal" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+                          </div>
+                        </div>
+                        <h4 class="text-sm font-semibold text-gray-900 mb-1">
+                          Tailwind CSS Documentation
+                        </h4>
+                        <p class="text-xs text-gray-500 mb-3 line-clamp-2">
+                          Utility-first CSS framework for rapid UI development.
+                        </p>
+                        <div class="flex gap-2">
+                          <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600">
+                            Dev
+                          </span>
+                          <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[#A7F3D0]/30 text-emerald-700">
+                            Docs
+                          </span>
+                        </div>
+                      </div>
+
+                      <!-- Card 2 -->
+                      <div class="p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group/card cursor-pointer">
+                        <div class="flex items-start justify-between mb-3">
+                          <div class="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center text-orange-600">
+                            <i data-lucide="figma" class="w-5 h-5 stroke-[1.5]"></i>
+                          </div>
+                          <div class="opacity-0 group-hover/card:opacity-100 transition-opacity">
+                            <i data-lucide="more-horizontal" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+                          </div>
+                        </div>
+                        <h4 class="text-sm font-semibold text-gray-900 mb-1">
+                          Design Systems Guide
+                        </h4>
+                        <p class="text-xs text-gray-500 mb-3 line-clamp-2">
+                          Comprehensive guide to building scalable design
+                          systems.
+                        </p>
+                        <div class="flex gap-2">
+                          <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600">
+                            Design
+                          </span>
+                          <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[#DDD6FE]/30 text-violet-700">
+                            Guide
+                          </span>
+                        </div>
+                      </div>
+
+                      <!-- Card 3 -->
+                      <div class="p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group/card cursor-pointer">
+                        <div class="flex items-start justify-between mb-3">
+                          <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                            <i data-lucide="type" class="w-5 h-5 stroke-[1.5]"></i>
+                          </div>
+                          <div class="opacity-0 group-hover/card:opacity-100 transition-opacity">
+                            <i data-lucide="more-horizontal" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+                          </div>
+                        </div>
+                        <h4 class="text-sm font-semibold text-gray-900 mb-1">
+                          Typography Principles
+                        </h4>
+                        <p class="text-xs text-gray-500 mb-3 line-clamp-2">
+                          Understanding font pairing and vertical rhythm.
+                        </p>
+                        <div class="flex gap-2">
+                          <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-[#BAE6FD]/30 text-sky-700">
+                            Article
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto relative z-10">
+          <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <!-- Visual LEFT -->
+            <div class="relative order-2 lg:order-1">
+              <div class="absolute inset-0 bg-gradient-to-tr from-[#A7F3D0]/20 to-[#BAE6FD]/20 rounded-3xl blur-2xl"></div>
+              <div class="relative bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden p-6">
+                <!-- Search UI -->
+                <div class="relative mb-6">
+                  <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                    <i data-lucide="search" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+                  </div>
+                  <input type="text" value="climate change solutions" readonly="" class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-sm text-gray-900 focus:ring-0 focus:border-gray-200">
+                </div>
+
+                <!-- Results -->
+                <div class="space-y-3">
+                  <!-- Result 1 -->
+                  <div class="p-3 rounded-lg bg-[#A7F3D0]/10 border border-[#A7F3D0]/30">
+                    <div class="flex items-start justify-between mb-1">
+                      <h4 class="text-sm font-medium text-gray-900">
+                        The Rise of Renewable Energy
+                      </h4>
+                      <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-100 text-emerald-700">
+                        98% Match
+                      </span>
+                    </div>
+                    <p class="text-xs text-gray-500 line-clamp-2">
+                      Global shift towards solar and wind power as primary
+                      sources...
+                    </p>
+                  </div>
+                  <!-- Result 2 -->
+                  <div class="p-3 rounded-lg border border-gray-100 opacity-60">
+                    <h4 class="text-sm font-medium text-gray-900 mb-1">
+                      Carbon Capture Technologies
+                    </h4>
+                    <p class="text-xs text-gray-500 line-clamp-1">
+                      New methods for extracting CO2 from atmosphere...
+                    </p>
+                  </div>
+                  <!-- Result 3 -->
+                  <div class="p-3 rounded-lg border border-gray-100 opacity-60">
+                    <h4 class="text-sm font-medium text-gray-900 mb-1">
+                      Sustainable Urban Planning
+                    </h4>
+                    <p class="text-xs text-gray-500 line-clamp-1">
+                      Designing cities for the future climate...
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Content RIGHT -->
+            <div class="flex flex-col gap-6 order-1 lg:order-2">
+              <span class="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <span class="w-2 h-2 rounded-full bg-[#A7F3D0]"></span>
+                Smart Search
+              </span>
+              <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+                Search by meaning,
+                <br>
+                not keywords
+              </h2>
+              <p class="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
+                Type 'climate change solutions' and find that article about
+                renewable energy—even if those exact words aren't in the title.
+                Our AI understands what you mean.
+              </p>
+
+              <ul class="space-y-4 mt-2">
+                <li class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#A7F3D0] flex items-center justify-center mt-0.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-gray-900 stroke-[3]"></i>
+                  </div>
+                  <span class="text-base text-gray-700">
+                    Semantic understanding powered by embeddings
+                  </span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#A7F3D0] flex items-center justify-center mt-0.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-gray-900 stroke-[3]"></i>
+                  </div>
+                  <span class="text-base text-gray-700">
+                    Works with your existing bookmarks instantly
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: MORE LIKE THIS -->
+      <section class="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50/50">
+        <div class="max-w-7xl mx-auto relative z-10">
+          <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <!-- Content LEFT -->
+            <div class="flex flex-col gap-6 order-1">
+              <span class="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <span class="w-2 h-2 rounded-full bg-[#BAE6FD]"></span>
+                Instant Discovery
+              </span>
+              <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+                Find related links
+                <br>
+                in one click
+              </h2>
+              <p class="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
+                Hover over any bookmark and click 'More like this.' Our AI
+                instantly finds similar content using semantic similarity—no
+                more digging through folders or endless scrolling.
+              </p>
+
+              <ul class="space-y-4 mt-2">
+                <li class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#BAE6FD] flex items-center justify-center mt-0.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-gray-900 stroke-[3]"></i>
+                  </div>
+                  <span class="text-base text-gray-700">
+                    Discovers connections you didn't know existed
+                  </span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#BAE6FD] flex items-center justify-center mt-0.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-gray-900 stroke-[3]"></i>
+                  </div>
+                  <span class="text-base text-gray-700">
+                    Powered by cosine similarity search
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Visual RIGHT -->
+            <div class="relative order-2">
+              <div class="absolute -inset-4 bg-[#BAE6FD]/30 rounded-full blur-3xl opacity-50"></div>
+              <div class="relative bg-white rounded-xl shadow-lg border border-gray-200 p-6 overflow-visible">
+                <!-- Main Card -->
+                <div class="flex gap-4 mb-4">
+                  <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center text-2xl">
+                    ⚡️
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-medium text-gray-900">
+                      The Future of Interface Design
+                    </h3>
+                    <p class="text-sm text-gray-500">smashingmagazine.com</p>
+                  </div>
+                </div>
+
+                <!-- Action Button -->
+                <button class="flex items-center gap-2 px-3 py-1.5 bg-gray-50 hover:bg-[#BAE6FD]/20 border border-gray-200 rounded-md text-xs font-medium text-gray-700 transition-colors mb-2">
+                  <i data-lucide="wand-2" class="w-3.5 h-3.5 stroke-[1.5]"></i>
+                  More like this
+                </button>
+
+                <!-- Popover Simulation -->
+                <div class="absolute top-[80%] -left-8 md:-left-12 w-64 bg-white rounded-lg shadow-xl border border-gray-200 p-3 z-10 animate-bounce" style="animation-duration: 3s;">
+                  <div class="text-[10px] font-semibold text-gray-400 uppercase mb-2 px-1">
+                    Similar Content
+                  </div>
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-md cursor-pointer">
+                      <div class="w-1 h-1 rounded-full bg-gray-400"></div>
+                      <span class="text-xs text-gray-700 truncate">
+                        Gestalt Principles in UI
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-md cursor-pointer">
+                      <div class="w-1 h-1 rounded-full bg-gray-400"></div>
+                      <span class="text-xs text-gray-700 truncate">
+                        Micro-interactions Guide
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: AI ORGANIZATION -->
+      <section class="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white">
+        <div class="max-w-7xl mx-auto relative z-10">
+          <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <!-- Visual LEFT -->
+            <div class="relative order-2 lg:order-1">
+              <div class="absolute inset-0 bg-gradient-to-bl from-[#DDD6FE]/20 to-[#A7F3D0]/10 rounded-3xl blur-2xl"></div>
+              <div class="relative bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="bg-gray-50 border-b border-gray-100 px-4 py-2 flex items-center justify-between">
+                  <span class="text-xs font-medium text-gray-500">
+                    Edit Bookmark
+                  </span>
+                  <i data-lucide="x" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+                </div>
+                <div class="p-6">
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1">
+                        Tags
+                      </label>
+                      <div class="flex flex-wrap gap-2">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-[#DDD6FE]/20 text-indigo-700 border border-[#DDD6FE]/50">
+                          Machine Learning
+                          <i data-lucide="x" class="w-3 h-3 ml-1 opacity-50 stroke-[1.5]"></i>
+                        </span>
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-[#DDD6FE]/20 text-indigo-700 border border-[#DDD6FE]/50">
+                          Python
+                          <i data-lucide="x" class="w-3 h-3 ml-1 opacity-50 stroke-[1.5]"></i>
+                        </span>
+                        <input type="text" placeholder="Add tag..." class="text-xs border-none focus:ring-0 p-1 placeholder-gray-400">
+                      </div>
+                    </div>
+
+                    <div class="pt-2">
+                      <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-500 stroke-[1.5]"></i>
+                        <span class="text-xs font-medium text-gray-900">
+                          AI Suggestions
+                        </span>
+                      </div>
+                      <div class="flex flex-wrap gap-2">
+                        <button class="px-2 py-1 rounded-md border border-gray-200 bg-gray-50 text-xs text-gray-600 hover:border-purple-200 hover:text-purple-700 hover:bg-purple-50 transition-colors">
+                          + Neural Networks
+                        </button>
+                        <button class="px-2 py-1 rounded-md border border-gray-200 bg-gray-50 text-xs text-gray-600 hover:border-purple-200 hover:text-purple-700 hover:bg-purple-50 transition-colors">
+                          + Data Science
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Content RIGHT -->
+            <div class="flex flex-col gap-6 order-1 lg:order-2">
+              <span class="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <span class="w-2 h-2 rounded-full bg-[#DDD6FE]"></span>
+                Effortless Organization
+              </span>
+              <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+                Let AI organize while
+                <br>
+                you focus on research
+              </h2>
+              <p class="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
+                Every bookmark gets smart tags and collection suggestions
+                automatically the moment you save it. No manual filing, no messy
+                folders, no forgotten links.
+              </p>
+
+              <ul class="space-y-4 mt-2">
+                <li class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#DDD6FE] flex items-center justify-center mt-0.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-gray-900 stroke-[3]"></i>
+                  </div>
+                  <span class="text-base text-gray-700">
+                    AI-suggested tags based on content analysis
+                  </span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#DDD6FE] flex items-center justify-center mt-0.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-gray-900 stroke-[3]"></i>
+                  </div>
+                  <span class="text-base text-gray-700">
+                    Smart collection recommendations
+                  </span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#DDD6FE] flex items-center justify-center mt-0.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-gray-900 stroke-[3]"></i>
+                  </div>
+                  <span class="text-base text-gray-700">
+                    Organize hundreds of bookmarks in seconds
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: BEAUTIFUL LAYOUTS -->
+      <section class="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50">
+        <div class="max-w-6xl mx-auto relative z-10">
+          <!-- Header Content -->
+          <div class="flex flex-col items-center text-center mb-16 md:mb-20">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500 mb-6">
+              <span class="w-2 h-2 rounded-full bg-[#FDE68A]"></span>
+              Your Way
+            </span>
+            <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-6">
+              Four gorgeous ways to
+              <br>
+              view your research
+            </h2>
+            <p class="text-lg text-gray-600 font-normal leading-relaxed max-w-2xl">
+              Switch between layouts based on your mood and task. From visual
+              inspiration boards to detailed lists—find what works for you.
+            </p>
+          </div>
+
+          <!-- Grid of Screenshots -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <!-- Grid View -->
+            <div class="group">
+              <div class="bg-white rounded-xl shadow-sm border border-gray-200 aspect-[4/3] p-4 flex flex-wrap content-start gap-2 overflow-hidden hover:shadow-md transition-shadow">
+                <div class="w-[45%] h-12 bg-gray-100 rounded-md"></div>
+                <div class="w-[45%] h-12 bg-gray-100 rounded-md"></div>
+                <div class="w-[45%] h-12 bg-gray-100 rounded-md"></div>
+                <div class="w-[45%] h-12 bg-gray-100 rounded-md"></div>
+              </div>
+              <div class="mt-3 text-center text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
+                Grid
+              </div>
+            </div>
+
+            <!-- Moodboard View -->
+            <div class="group">
+              <div class="bg-white rounded-xl shadow-sm border border-gray-200 aspect-[4/3] p-4 flex gap-2 overflow-hidden hover:shadow-md transition-shadow">
+                <div class="flex-1 flex flex-col gap-2">
+                  <div class="h-16 bg-gray-100 rounded-md"></div>
+                  <div class="h-10 bg-gray-100 rounded-md"></div>
+                </div>
+                <div class="flex-1 flex flex-col gap-2 pt-4">
+                  <div class="h-8 bg-gray-100 rounded-md"></div>
+                  <div class="h-16 bg-gray-100 rounded-md"></div>
+                </div>
+              </div>
+              <div class="mt-3 text-center text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
+                Moodboard
+              </div>
+            </div>
+
+            <!-- Timeline View -->
+            <div class="group">
+              <div class="bg-white rounded-xl shadow-sm border border-gray-200 aspect-[4/3] p-4 relative overflow-hidden hover:shadow-md transition-shadow">
+                <div class="absolute left-1/2 top-4 bottom-4 w-0.5 bg-gray-100 -translate-x-1/2"></div>
+                <div class="relative z-10 flex flex-col gap-4">
+                  <div class="self-start w-12 h-6 bg-gray-100 rounded-md ml-2"></div>
+                  <div class="self-end w-12 h-6 bg-gray-100 rounded-md mr-2"></div>
+                  <div class="self-start w-12 h-6 bg-gray-100 rounded-md ml-2"></div>
+                </div>
+              </div>
+              <div class="mt-3 text-center text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
+                Timeline
+              </div>
+            </div>
+
+            <!-- List View -->
+            <div class="group">
+              <div class="bg-white rounded-xl shadow-sm border border-gray-200 aspect-[4/3] p-4 flex flex-col gap-2 overflow-hidden hover:shadow-md transition-shadow">
+                <div class="w-full h-4 bg-gray-100 rounded-sm"></div>
+                <div class="w-full h-4 bg-gray-100 rounded-sm"></div>
+                <div class="w-full h-4 bg-gray-100 rounded-sm"></div>
+                <div class="w-full h-4 bg-gray-100 rounded-sm"></div>
+                <div class="w-full h-4 bg-gray-100 rounded-sm"></div>
+              </div>
+              <div class="mt-3 text-center text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
+                List
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: WAVE GOODBYE & STATS -->
+      <section class="w-full relative px-6 md:px-12 py-24 md:py-40" style="background-image: radial-gradient(at 0% 0%, rgba(127, 232, 184, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(196, 181, 253, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(125, 211, 252, 0.1) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(252, 211, 77, 0.1) 0px, transparent 50%); background-color: #FAFAFA;">
+        <div class="max-w-7xl mx-auto">
+          <!-- Headline Container - Fixed Alignment -->
+          <div class="mx-auto w-full max-w-[1600px] flex flex-col xl:flex-row items-center justify-center gap-6 xl:gap-10 mb-24 px-4 sm:px-6">
+            <!-- Left Side Title -->
+            <div class="flex-1 flex justify-center xl:justify-end min-w-0">
+              <h2 class="text-3xl sm:text-4xl md:text-6xl tracking-tight text-gray-900 leading-tight font-bold z-20 whitespace-nowrap text-center xl:text-right flex-shrink-0 relative py-2">
+                <span class="relative inline-block">
+                  <span class="absolute -left-6 -top-10 text-[#A7F3D0] animate-pulse">
+                    <iconify-icon icon="solar:stars-minimalistic-bold-duotone" width="32"></iconify-icon>
+                  </span>
+                  <span class="absolute -left-12 top-1/2 -translate-y-1/2 text-[#BAE6FD] animate-blob" style="animation-duration: 4s">
+                    <iconify-icon icon="solar:star-fall-minimalistic-2-bold-duotone" width="24"></iconify-icon>
+                  </span>
+                  <span class="absolute -left-5 -bottom-2 text-[#DDD6FE] animate-float" style="animation-duration: 5s">
+                    <iconify-icon icon="solar:sparkle-bold-duotone" width="18"></iconify-icon>
+                  </span>
+                  Wave goodbye to
+                </span>
+              </h2>
+            </div>
+
+            <!-- Right Side List -->
+            <div class="flex-1 flex justify-center xl:justify-start w-full min-w-0">
+              <div class="relative h-40 sm:h-48 md:h-64 w-full max-w-[900px] overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
+                <div id="problem-list" class="absolute left-0 right-0 top-1/2 flex flex-col items-center xl:items-start transition-transform duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] pl-2"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Section -->
+          <div class="relative">
+            <!-- Connecting Line -->
+            <div class="absolute top-8 left-0 w-full h-px bg-gray-200/60 hidden md:block"></div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-8">
+              <!-- Stat 1 -->
+              <div class="relative flex flex-col items-center text-center gap-6 group">
+                <div class="w-20 h-20 rounded-full bg-white border border-emerald-100 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-300" style="box-shadow: 0 0 30px -5px rgba(127, 232, 184, 0.4);">
+                  <div class="absolute inset-0 bg-[#7FE8B8] rounded-full opacity-40 blur-[20px] group-hover:opacity-60 transition-opacity animate-pulse"></div>
+                  <i data-lucide="bookmark" class="w-8 h-8 text-emerald-600 stroke-[2]"></i>
+                </div>
+                <div>
+                  <div class="text-4xl font-semibold text-gray-900 tracking-tight mb-1">
+                    10K+
+                  </div>
+                  <div class="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    Bookmarks Saved
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stat 2 -->
+              <div class="relative flex flex-col items-center text-center gap-6 group">
+                <div class="w-20 h-20 rounded-full bg-white border border-violet-100 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-300" style="box-shadow: 0 0 30px -5px rgba(196, 181, 253, 0.4);">
+                  <div class="absolute inset-0 bg-[#C4B5FD] rounded-full opacity-40 blur-[20px] group-hover:opacity-60 transition-opacity animate-pulse"></div>
+                  <i data-lucide="sparkles" class="w-8 h-8 text-violet-600 stroke-[2]"></i>
+                </div>
+                <div>
+                  <div class="text-4xl font-semibold text-gray-900 tracking-tight mb-1">
+                    50K+
+                  </div>
+                  <div class="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    AI Tags Generated
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stat 3 -->
+              <div class="relative flex flex-col items-center text-center gap-6 group">
+                <div class="w-20 h-20 rounded-full bg-white border border-sky-100 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-300" style="box-shadow: 0 0 30px -5px rgba(125, 211, 252, 0.4);">
+                  <div class="absolute inset-0 bg-[#7DD3FC] rounded-full opacity-40 blur-[20px] group-hover:opacity-60 transition-opacity animate-pulse"></div>
+                  <i data-lucide="search" class="w-8 h-8 text-sky-600 stroke-[2]"></i>
+                </div>
+                <div>
+                  <div class="text-4xl font-semibold text-gray-900 tracking-tight mb-1">
+                    25K+
+                  </div>
+                  <div class="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    Smart Searches
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stat 4 -->
+              <div class="relative flex flex-col items-center text-center gap-6 group">
+                <div class="w-20 h-20 rounded-full bg-white border border-yellow-100 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-300" style="box-shadow: 0 0 30px -5px rgba(252, 211, 77, 0.4);">
+                  <div class="absolute inset-0 bg-[#FCD34D] rounded-full opacity-40 blur-[20px] group-hover:opacity-60 transition-opacity animate-pulse"></div>
+                  <i data-lucide="zap" class="w-8 h-8 text-amber-500 stroke-[2]"></i>
+                </div>
+                <div>
+                  <div class="text-4xl font-semibold text-gray-900 tracking-tight mb-1">
+                    500+
+                  </div>
+                  <div class="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    Hours Saved
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Pricing Section (Kept) -->
+      <section class="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50/50 border-t border-gray-200 rounded-b-[2rem]">
+        <div class="max-w-4xl mx-auto relative z-10">
+          <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500 mb-6">
+              Pricing
+            </div>
+            <h2 class="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-4">
+              Simple pricing for smarter bookmarking
+            </h2>
+            <p class="text-lg text-gray-600 font-normal">
+              Start free, upgrade when you need AI-powered discovery
+            </p>
+          </div>
+          <div class="flex justify-center items-center gap-4 mb-16">
+            <span class="text-sm font-medium text-gray-900" id="monthly-label">
+              Billed Monthly
+            </span>
+            <button id="billing-toggle" class="relative w-12 h-6 bg-gray-200 rounded-full transition-colors duration-300 focus:outline-none">
+              <span id="toggle-circle" class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300"></span>
+            </button>
+            <span class="text-sm font-medium text-gray-500" id="yearly-label">
+              Billed Yearly
+            </span>
+            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100" id="annual-savings">
+              Save ~28%
+            </span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
+              <div class="p-8 pb-0">
+                <div class="w-12 h-12 rounded-xl bg-[#A7F3D0]/30 flex items-center justify-center mb-6 text-emerald-700">
+                  <i data-lucide="bookmark" class="w-6 h-6 stroke-[1.5]"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                  Start Smart
+                </h3>
+                <p class="text-sm text-gray-500 mb-6 h-10 leading-relaxed">
+                  Perfect for trying LinkLens
+                </p>
+                <div class="flex items-baseline gap-1 mb-8">
+                  <span class="text-5xl font-semibold tracking-tight text-gray-900">
+                    $0
+                  </span>
+                  <span class="text-base font-medium text-gray-500">
+                    Forever
+                  </span>
+                </div>
+                <button class="w-full bg-gray-900 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200">
+                  Get Started Free
+                </button>
+              </div>
+              <div class="p-8 bg-gray-50 mt-8 flex-1 border-t border-gray-100">
+                <ul class="space-y-4">
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5"></i>
+                    100 bookmarks
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5"></i>
+                    5 collections
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5"></i>
+                    AI-powered tags
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5"></i>
+                    AI collection suggestions
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5"></i>
+                    Reader mode
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5"></i>
+                    4 beautiful layouts
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5"></i>
+                    Chrome extension
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5"></i>
+                    Basic search
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="relative bg-white rounded-2xl shadow-xl border border-transparent overflow-hidden flex flex-col h-full ring-1 ring-[#DDD6FE] shadow-indigo-100">
+              <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#A7F3D0] via-[#BAE6FD] to-[#DDD6FE]"></div>
+              <div class="absolute top-5 right-5 bg-[#DDD6FE]/20 text-indigo-900 text-[10px] font-bold px-2.5 py-1 rounded-full border border-[#DDD6FE]/50 uppercase tracking-wide">
+                Most Popular
+              </div>
+              <div class="p-8 pb-0 relative">
+                <div class="w-12 h-12 rounded-xl bg-[#DDD6FE]/30 flex items-center justify-center mb-6 text-violet-700">
+                  <i data-lucide="sparkles" class="w-6 h-6 stroke-[1.5]"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                  Discover Faster
+                </h3>
+                <p class="text-sm text-gray-500 mb-6 h-10 leading-relaxed">
+                  Unlock AI-powered discovery
+                </p>
+                <div class="relative h-20 mb-1 w-full">
+                  <div id="monthly-price" class="absolute left-0 top-0 flex items-baseline gap-1 transition-all duration-500 ease-out transform translate-y-0 opacity-100 origin-top">
+                    <span class="text-5xl font-semibold tracking-tight text-gray-900">
+                      $7
+                    </span>
+                    <span class="text-base font-medium text-gray-500">/mo</span>
+                  </div>
+                  <div id="yearly-price" class="absolute left-0 top-0 flex flex-col items-start transition-all duration-500 ease-out transform translate-y-4 opacity-0 pointer-events-none origin-top">
+                    <div class="flex items-baseline gap-1">
+                      <span class="text-5xl font-semibold tracking-tight text-gray-900">
+                        $5
+                      </span>
+                      <span class="text-base font-medium text-gray-500">
+                        /mo
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-2 mt-2">
+                      <span class="text-sm text-gray-500 font-medium">
+                        Billed annually at $60
+                      </span>
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#A7F3D0] text-emerald-800 tracking-wide uppercase">
+                        Save $24
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl py-2.5 text-sm font-medium shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all hover:translate-y-px">
+                  Start 14-Day Free Trial
+                </button>
+                <p class="text-center text-xs text-gray-400 mt-3 font-medium">
+                  No credit card required
+                </p>
+              </div>
+              <div class="p-8 bg-gray-50 mt-6 flex-1 border-t border-gray-100">
+                <ul class="space-y-4">
+                  <li class="flex items-start gap-3 text-sm text-gray-900">
+                    <div class="w-4 h-4 rounded-full bg-[#DDD6FE] flex items-center justify-center mt-0.5 flex-shrink-0">
+                      <i data-lucide="check" class="w-2.5 h-2.5 text-gray-900 stroke-[3]"></i>
+                    </div>
+                    <span class="font-medium">Everything in Free</span>
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-violet-500 stroke-[2] mt-0.5"></i>
+                    Unlimited bookmarks
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-violet-500 stroke-[2] mt-0.5"></i>
+                    Unlimited collections
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-violet-500 stroke-[2] mt-0.5"></i>
+                    Semantic search
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-violet-500 stroke-[2] mt-0.5"></i>
+                    "More like this" discovery
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-violet-500 stroke-[2] mt-0.5"></i>
+                    Bulk organization
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-violet-500 stroke-[2] mt-0.5"></i>
+                    Export your data
+                  </li>
+                  <li class="flex items-start gap-3 text-sm text-gray-600">
+                    <i data-lucide="check" class="w-4 h-4 text-violet-500 stroke-[2] mt-0.5"></i>
+                    Priority support
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="mt-16 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-gray-500">
+            <div class="flex items-center gap-2">
+              <i data-lucide="check-circle" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+              14-day free trial
+            </div>
+            <div class="flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+              No credit card required
+            </div>
+            <div class="flex items-center gap-2">
+              <i data-lucide="calendar-off" class="w-4 h-4 text-gray-400 stroke-[1.5]"></i>
+              Cancel anytime
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script>
+      lucide.createIcons();
+    </script>
+
+    <script>
+      // Pricing Toggle Logic
+      const toggle = document.getElementById('billing-toggle');
+      const toggleCircle = document.getElementById('toggle-circle');
+      const monthlyPrice = document.getElementById('monthly-price');
+      const yearlyPrice = document.getElementById('yearly-price');
+
+      let isYearly = false;
+
+      if(toggle) {
+          toggle.addEventListener('click', () => {
+              isYearly = !isYearly;
+              if(isYearly) {
+                  toggle.classList.remove('bg-gray-200');
+                  toggle.classList.add('bg-gray-900');
+                  toggleCircle.classList.add('translate-x-6');
+
+                  monthlyPrice.classList.remove('opacity-100', 'translate-y-0');
+                  monthlyPrice.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
+
+                  yearlyPrice.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                  yearlyPrice.classList.add('opacity-100', 'translate-y-0');
+              } else {
+                  toggle.classList.add('bg-gray-200');
+                  toggle.classList.remove('bg-gray-900');
+                  toggleCircle.classList.remove('translate-x-6');
+
+                  monthlyPrice.classList.add('opacity-100', 'translate-y-0');
+                  monthlyPrice.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
+
+                  yearlyPrice.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                  yearlyPrice.classList.remove('opacity-100', 'translate-y-0');
+              }
+          });
+      }
+
+      // Fixed Animation Script
+      (function() {
+          const problems = [
+              "247 open tabs",
+              "lost bookmarks",
+              "endless scrolling",
+              "manual organizing",
+              "search frustration",
+              "tab overload"
+          ];
+
+          const listContainer = document.getElementById('problem-list');
+
+          // Create 3 sets for smooth infinite looping
+          const loopItems = [...problems, ...problems, ...problems];
+
+          // Render items with improved padding to prevent clipping
+          listContainer.innerHTML = loopItems.map(text =>
+              `<div class="problem-item w-full text-center xl:text-left text-3xl sm:text-4xl md:text-6xl font-medium text-gray-300/40 blur-[2px] scale-90 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] origin-center xl:origin-left whitespace-nowrap leading-relaxed py-4 pr-12 select-none">${text}</div>`
+          ).join('');
+
+          const items = Array.from(listContainer.children);
+
+          // Start at index 6 (Beginning of the 2nd set)
+          let currentIndex = 6;
+
+          function updateVisuals(index, instant = false) {
+              const activeItem = items[index];
+              if(!activeItem) return;
+
+              // Center the active item in the container
+              const itemCenter = activeItem.offsetTop + (activeItem.offsetHeight / 2);
+              listContainer.style.transform = `translateY(-${itemCenter}px)`;
+
+              if(instant) {
+                  listContainer.style.transition = 'none';
+                  items.forEach(item => item.style.transition = 'none');
+              } else {
+                  listContainer.style.transition = 'transform 1000ms cubic-bezier(0.25, 1, 0.5, 1)';
+                  items.forEach(item => item.style.transition = 'all 1000ms cubic-bezier(0.25, 1, 0.5, 1)');
+              }
+
+              // Apply styles
+              items.forEach((item, idx) => {
+                  if (idx === index) {
+                      // Active state - Gradient text
+                      item.className = 'problem-item w-full text-center xl:text-left text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#7FE8B8] via-[#7DD3FC] to-[#C4B5FD] opacity-100 scale-100 blur-0 origin-center xl:origin-left whitespace-nowrap leading-relaxed py-4 pr-12 select-none';
+                      // Removed text-shadow to prevent double-blur look on some browsers during transition
+                      item.style.textShadow = '0 0 40px rgba(127, 232, 184, 0.2)';
+                  } else {
+                      // Inactive state - Greyed out but using bg-clip-text for smoother transition property match
+                      // Using a gray gradient ensures the transition engine treats it similarly to the color gradient
+                      item.className = 'problem-item w-full text-center xl:text-left text-3xl sm:text-4xl md:text-6xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-gray-300 to-gray-400 line-through decoration-2 decoration-gray-300/50 opacity-30 blur-sm scale-95 origin-center xl:origin-left whitespace-nowrap leading-relaxed py-4 pr-12 select-none';
+                      item.style.textShadow = 'none';
+                  }
+              });
+          }
+
+          // Initial render
+          updateVisuals(currentIndex, true);
+
+          setInterval(() => {
+              currentIndex++;
+              updateVisuals(currentIndex);
+
+              if (currentIndex === 12) {
+                  setTimeout(() => {
+                      currentIndex = 6;
+                      updateVisuals(currentIndex, true);
+                  }, 1000);
+              }
+          }, 2500);
+      })()
+    </script>
+  
+</body></html>
