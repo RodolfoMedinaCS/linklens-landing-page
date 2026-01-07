@@ -2,9 +2,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Menu, BookmarkPlus, Sparkles, Search, LayoutGrid, Star, Clock, FileCode2,
   MoreHorizontal, Figma, Type, Check, Wand2, X, Bookmark, Zap, CheckCircle,
-  ShieldCheck, CalendarOff, Plus, Mail, ArrowRight
+  ShieldCheck, CalendarOff, Plus, Mail, ArrowRight, BookOpen, Highlighter,
+  Quote, Ruler, List, Palette, MousePointerClick, Download
 } from 'lucide-react';
 import Lenis from 'lenis';
+import { ExtensionSpotlight } from './components/ExtensionSpotlight';
+import { SemanticSearchVisual } from './components/SemanticSearchVisual';
+import { DiscoveryVisual } from './components/DiscoveryVisual';
+import { ReaderModeSpotlightV2 } from './components/ReaderModeSpotlightV2';
+import { CollectionsTree } from './components/CollectionsTree';
+import { StudentVisual } from './components/use-cases/StudentVisual';
+import { ResearcherVisual } from './components/use-cases/ResearcherVisual';
+import { EducatorVisual } from './components/use-cases/EducatorVisual';
+import { CreatorVisual } from './components/use-cases/CreatorVisual';
 import { tabContent, leftFaqs, rightFaqs, problems, footerLinks } from './data';
 
 function App() {
@@ -24,11 +34,6 @@ function App() {
   
   // Track previous state to avoid unnecessary DOM writes
   const wasScrolledRef = useRef(false);
-
-  // Debug: Track re-renders
-  const renderCount = useRef(0);
-  renderCount.current++;
-  console.log(`[Re-render] App component rendered #${renderCount.current}`);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -54,7 +59,6 @@ function App() {
 
       // 2. Navbar Styling (Conditional - Only update on change)
       if (isScrolled !== wasScrolledRef.current) {
-        console.log(`[Scroll Logic] State changing! isScrolled: ${isScrolled}`);
         
         if (navContainerRef.current) {
           if (isScrolled) {
@@ -143,16 +147,6 @@ function App() {
     }
   }, [problemIndex, isInstant]);
 
-  const getIcon = (name) => {
-    switch (name) {
-        case "bookmark": return Bookmark;
-        case "search": return Search;
-        case "layout": return LayoutGrid;
-        case "sparkles": return Sparkles;
-        default: return Bookmark;
-    }
-  };
-
   return (
     <div className="bg-white min-h-screen font-sans antialiased text-gray-900 selection:bg-[#BAE6FD] selection:text-gray-900">
       {/* Navbar */}
@@ -161,9 +155,9 @@ function App() {
           ref={navContainerRef}
           className="mx-auto flex items-center justify-between transition-all duration-500 ease-in-out max-w-5xl bg-transparent border-transparent py-2 px-6"
         >
-          <div className="flex items-center gap-2">
-            <iconify-icon icon="solar:bookmark-square-minimalistic-bold-duotone" className="text-gray-900 text-2xl"></iconify-icon>
-            <span ref={logoTextRef} className="text-lg font-bold tracking-tight text-gray-900 transition-opacity duration-300">LinkLens</span>
+          <div className="flex items-center gap-0.5">
+            <img src="/logo-prism.png" alt="LinkLens" className="w-9 h-9 object-contain" />
+            <span ref={logoTextRef} className="text-lg font-bold tracking-tight text-gray-900 transition-opacity duration-300 -ml-1">LinkLens</span>
           </div>
 
           <div className="hidden md:flex items-center gap-6">
@@ -222,19 +216,17 @@ function App() {
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tight text-gray-900 mb-6 max-w-4xl leading-[1.1]">
-            Never lose a link again.
-            <br className="hidden md:block" />
-            Find it in seconds with {' '}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-sky-300 to-violet-300 font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
-              AI
+            Save. Organize. Read.
+            <br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-sky-400 to-violet-400 font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
+              All in one place.
             </span>
-            .
           </h1>
 
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mb-10 font-normal leading-relaxed">
-            The smart bookmarking tool for students, researchers, and knowledge
-            workers. Save, organize, and rediscover your research with AI-powered
-            search.
+            LinkLens is the modern bookmark manager for students and researchers.
+            Save links in one click, organize them in beautiful collections, and
+            read distraction-free with powerful tools.
           </p>
 
           <div className="flex flex-col items-center gap-6 mb-16">
@@ -243,7 +235,7 @@ function App() {
               <iconify-icon icon="solar:arrow-right-linear" className="group-hover:translate-x-1 transition-transform"></iconify-icon>
             </button>
             <div className="text-sm font-medium text-gray-500">
-              No credit card required • 100 bookmarks free forever
+              No credit card required • 75 bookmarks free forever
             </div>
           </div>
 
@@ -267,498 +259,291 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className="w-full h-[400px] md:h-[550px] bg-gray-50 flex flex-col items-center justify-center text-gray-400 gap-4">
-                <div className="w-24 h-24 rounded-2xl bg-white border border-gray-200 flex items-center justify-center shadow-sm">
-                  <iconify-icon icon="solar:gallery-wide-linear" className="text-4xl text-gray-300"></iconify-icon>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Logos */}
-          <div className="mt-20 w-full text-center relative z-10">
-            <p className="text-sm font-medium text-gray-400 mb-8 tracking-wide">
-              Backed by the best
-            </p>
-            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-              <div className="flex items-center gap-2 group cursor-pointer">
-                <iconify-icon icon="simple-icons:loom" width="24" className="text-gray-900"></iconify-icon>
-                <span className="text-lg font-semibold text-gray-700 font-sans tracking-tight">
-                  Lumina
-                </span>
-              </div>
-              <div className="flex items-center gap-2 group cursor-pointer">
-                <iconify-icon icon="simple-icons:stripe" width="24" className="text-gray-900"></iconify-icon>
-                <span className="text-lg font-semibold text-gray-700 font-sans tracking-tight">
-                  Synergy
-                </span>
-              </div>
-              <div className="flex items-center gap-2 group cursor-pointer">
-                <iconify-icon icon="simple-icons:notion" width="24" className="text-gray-900"></iconify-icon>
-                <span className="text-lg font-semibold text-gray-700 font-sans tracking-tight">
-                  Enigma
-                </span>
-              </div>
-              <div className="flex items-center gap-2 group cursor-pointer">
-                <iconify-icon icon="simple-icons:airbnb" width="24" className="text-gray-900"></iconify-icon>
-                <span className="text-lg font-semibold text-gray-700 font-sans tracking-tight">
-                  Apex
-                </span>
+              <div className="w-full bg-gray-50 flex flex-col items-center justify-center overflow-hidden">
+                <img 
+                  src="/hero-dashboard-new.png" 
+                  alt="LinkLens Dashboard" 
+                  className="w-full h-auto block" 
+                />
               </div>
             </div>
           </div>
         </div>
 
-        {/* SECTION 1: HOW IT WORKS */}
-        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white border-t border-gray-100 overflow-hidden">
-          <div className="max-w-[1400px] mx-auto relative z-10">
-            <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
-              {/* Content LEFT */}
-              <div className="flex flex-col gap-6 order-1">
-                {/* Badge */}
-                <div className="inline-flex self-start items-center gap-2 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm transition-shadow hover:shadow-md cursor-default mb-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                  </span>
-                  <span className="text-xs font-semibold text-gray-600 tracking-wider">
-                    SIMPLE. SMART. SEAMLESS.
-                  </span>
+        {/* SECTION 2: 3 CORE PILLARS */}
+        <section className="w-full py-20 px-6 border-b border-gray-100 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
+              {/* Pillar 1: Save */}
+              <div className="flex flex-col md:flex-row gap-5 items-center md:items-start group">
+                <div className="w-14 h-14 rounded-2xl bg-[#A7F3D0]/30 text-emerald-700 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <BookmarkPlus className="w-7 h-7 stroke-[1.5]" />
                 </div>
-
-                {/* Headings */}
                 <div>
-                  <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-gray-900 mb-4 leading-[1.1]">
-                    Save, organize, and
-                    <br />
-                    rediscover in three steps
-                  </h2>
-                  <p className="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
-                    Let AI do the heavy lifting while you focus on your research.
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Save Instantly</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Bookmark articles, videos, and papers with one click using our Chrome extension. No more lost tabs.
                   </p>
                 </div>
-
-                {/* 3 Steps Row (Columns) */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-10">
-                  {/* Step 1 */}
-                  <div className="flex flex-col gap-4 group">
-                    <div className="w-[60px] h-[60px] rounded-full bg-[#A7F3D0] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-emerald-200/50">
-                      <BookmarkPlus className="w-7 h-7 text-emerald-900 stroke-[1.5]" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-gray-900 mb-2">
-                        Save in one click
-                      </h3>
-                      <p className="text-sm text-gray-500 leading-relaxed">
-                        Bookmark any page with our Chrome extension. Add to
-                        collections, write notes, and let AI suggest tags
-                        instantly.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div className="flex flex-col gap-4 group">
-                    <div className="w-[60px] h-[60px] rounded-full bg-[#DDD6FE] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-violet-200/50">
-                      <Sparkles className="w-7 h-7 text-violet-900 stroke-[1.5]" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-gray-900 mb-2">
-                        AI organizes automatically
-                      </h3>
-                      <p className="text-sm text-gray-500 leading-relaxed">
-                        Smart tags, collection suggestions, and semantic indexing
-                        happen in the background. No manual filing required.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Step 3 */}
-                  <div className="flex flex-col gap-4 group">
-                    <div className="w-[60px] h-[60px] rounded-full bg-[#BAE6FD] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-sky-200/50">
-                      <Search className="w-7 h-7 text-sky-900 stroke-[1.5]" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-gray-900 mb-2">
-                        Find anything in seconds
-                      </h3>
-                      <p className="text-sm text-gray-500 leading-relaxed">
-                        Search by meaning with semantic search, or click 'More
-                        like this' to discover similar bookmarks instantly.
-                      </p>
-                    </div>
-                  </div>
+              </div>
+              
+              {/* Pillar 2: Organize */}
+              <div className="flex flex-col md:flex-row gap-5 items-center md:items-start group">
+                <div className="w-14 h-14 rounded-2xl bg-[#BAE6FD]/30 text-sky-700 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                   <LayoutGrid className="w-7 h-7 stroke-[1.5]" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Organize Beautifully</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Sort your research into visual collections. Choose from 1,300+ icons and 4 stunning layouts.
+                  </p>
                 </div>
               </div>
 
-              {/* Content RIGHT (Dashboard Visual) */}
-              <div className="relative order-2 h-full min-h-[500px] flex items-center justify-center">
-                {/* Blobs */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-gray-100 via-gray-50 to-white rounded-full blur-3xl opacity-50 -z-10"></div>
-
-                {/* Dashboard Container */}
-                <div className="w-full relative bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden transform hover:scale-[1.01] transition-transform duration-500">
-                  {/* Title Bar */}
-                  <div className="h-10 border-b border-gray-100 flex items-center px-4 gap-2 bg-gray-50/50">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-gray-300"></div>
-                    </div>
-                    <div className="ml-4 flex-1 flex justify-center">
-                      <div className="h-5 w-48 bg-gray-100 rounded-md"></div>
-                    </div>
-                  </div>
-
-                  <div className="h-[450px] bg-gray-50 overflow-hidden">
-                    <img 
-                      src="/dashboard-v2.png" 
-                      alt="LinkLens Dashboard" 
-                      className="w-full h-full object-cover object-top" 
-                    />
-                  </div>
+              {/* Pillar 3: Read */}
+              <div className="flex flex-col md:flex-row gap-5 items-center md:items-start group">
+                <div className="w-14 h-14 rounded-2xl bg-[#DDD6FE]/30 text-violet-700 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                   <BookOpen className="w-7 h-7 stroke-[1.5]" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Read & Cite</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Read without distractions. Highlight, annotate, and generate citations automatically for your papers.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white border-t border-gray-100">
-          <div className="max-w-7xl mx-auto relative z-10">
-            <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-              {/* Visual LEFT */}
-              <div className="relative order-2 lg:order-1">
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#A7F3D0]/20 to-[#BAE6FD]/20 rounded-3xl blur-2xl"></div>
-                <div className="relative bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                  <video 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
-                    className="w-full h-full object-cover scale-[1.01]"
-                  >
-                    <source src="/SmartSearch2.mp4" type="video/mp4" />
-                  </video>
-                </div>
-              </div>
+        {/* SECTION 3: SAVE (CHROME EXTENSION) */}
+        <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-white relative overflow-hidden">
+           <div className="max-w-7xl mx-auto relative z-10">
+             <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                {/* Content */}
+                <div className="flex flex-col gap-6 order-2 lg:order-1">
+                  <span className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold uppercase tracking-wider text-emerald-700">
+                    <Bookmark className="w-3 h-3 fill-current" />
+                    Save Content
+                  </span>
+                  <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+                    Capture ideas without
+                    <br />
+                    breaking your flow
+                  </h2>
+                  <p className="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
+                    See something interesting? Click the LinkLens button and keep browsing. We’ll handle the rest.
+                  </p>
 
-              {/* Content RIGHT */}
-              <div className="flex flex-col gap-6 order-1 lg:order-2">
-                <span className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  <span className="w-2 h-2 rounded-full bg-[#A7F3D0]"></span>
-                  Smart Search
+                  <div className="flex flex-col gap-4 mt-4">
+                    <div className="flex items-start gap-4">
+                       <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0">
+                         <MousePointerClick className="w-5 h-5 text-gray-700" />
+                       </div>
+                       <div>
+                         <h4 className="text-base font-semibold text-gray-900">One-click Capture</h4>
+                         <p className="text-sm text-gray-500 mt-1">
+                           Save the current tab instantly via Chrome extension.
+                         </p>
+                       </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                       <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0">
+                         <Sparkles className="w-5 h-5 text-gray-700" />
+                       </div>
+                       <div>
+                         <h4 className="text-base font-semibold text-gray-900">Smart Tagging</h4>
+                         <p className="text-sm text-gray-500 mt-1">
+                           AI automatically suggests tags so you don't have to type them.
+                         </p>
+                       </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                       <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0">
+                         <FileCode2 className="w-5 h-5 text-gray-700" />
+                       </div>
+                       <div>
+                         <h4 className="text-base font-semibold text-gray-900">Add Notes Instantly</h4>
+                         <p className="text-sm text-gray-500 mt-1">
+                           Jot down why you saved it before you forget.
+                         </p>
+                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Visual */}
+                <div className="relative order-1 lg:order-2 flex justify-center">
+                   <ExtensionSpotlight />
+                </div>
+             </div>
+           </div>
+        </section>
+
+        {/* SECTION 4: ORGANIZE (COLLECTIONS) */}
+        <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-gray-50/50">
+           <div className="max-w-7xl mx-auto">
+             <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                {/* Visual */}
+                <div className="relative flex justify-center">
+                   <CollectionsTree />
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col gap-6">
+                  <span className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-100 text-xs font-semibold uppercase tracking-wider text-sky-700">
+                    <LayoutGrid className="w-3 h-3 fill-current" />
+                    Organize
+                  </span>
+                  <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+                    Make it yours with
+                    <br />
+                    custom collections
+                  </h2>
+                  <p className="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
+                    Create the perfect library structure. Whether you're a visual thinker or a list lover, LinkLens adapts to you.
+                  </p>
+
+                  <ul className="space-y-4 mt-2">
+                     <li className="flex items-center gap-3">
+                        <Check className="w-5 h-5 text-sky-500" />
+                        <span className="text-gray-700">Choose from 1,300+ custom icons</span>
+                     </li>
+                     <li className="flex items-center gap-3">
+                        <Check className="w-5 h-5 text-sky-500" />
+                        <span className="text-gray-700">Unlimited nested collections (Premium)</span>
+                     </li>
+                     <li className="flex items-center gap-3">
+                        <Check className="w-5 h-5 text-sky-500" />
+                        <span className="text-gray-700">Drag and drop organization</span>
+                     </li>
+                     <li className="flex items-center gap-3">
+                        <Check className="w-5 h-5 text-sky-500" />
+                        <span className="text-gray-700">AI suggests where new bookmarks belong</span>
+                     </li>
+                  </ul>
+                </div>
+             </div>
+           </div>
+        </section>
+
+        {/* SECTION 5: READER MODE (MAJOR FEATURE) */}
+        <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-white border-y border-gray-100">
+           <div className="max-w-[1400px] mx-auto">
+             <div className="text-center max-w-3xl mx-auto mb-20">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 border border-violet-100 text-xs font-semibold uppercase tracking-wider text-violet-700 mb-6">
+                   <BookOpen className="w-3 h-3 fill-current" />
+                   Reader Mode
                 </span>
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
-                  Search by meaning,
-                  <br />
-                  not keywords
+                <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-6">
+                   Your research powerhouse.
                 </h2>
-                <p className="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
-                  Type 'climate change solutions' and find that article about
-                  renewable energy—even if those exact words aren't in the title.
-                  Our AI understands what you mean.
+                <p className="text-xl text-gray-600 leading-relaxed">
+                   LinkLens isn't just for saving links. It's for reading, understanding, and using them. 
+                   Switch to Reader Mode for a distraction-free experience designed for students.
                 </p>
+             </div>
 
-                <ul className="space-y-4 mt-2">
-                  <li className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#A7F3D0] flex items-center justify-center mt-0.5">
-                      <Check className="w-3.5 h-3.5 text-gray-900 stroke-[3]" />
-                    </div>
-                    <span className="text-base text-gray-700">
-                      Semantic understanding powered by embeddings
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#A7F3D0] flex items-center justify-center mt-0.5">
-                      <Check className="w-3.5 h-3.5 text-gray-900 stroke-[3]" />
-                    </div>
-                    <span className="text-base text-gray-700">
-                      Works with your existing bookmarks instantly
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+             <ReaderModeSpotlightV2 />
+           </div>
         </section>
 
-        {/* SECTION 2: MORE LIKE THIS */}
-        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50/50">
-          <div className="max-w-7xl mx-auto relative z-10">
-            <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-              {/* Content LEFT */}
-              <div className="flex flex-col gap-6 order-1">
-                <span className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  <span className="w-2 h-2 rounded-full bg-[#BAE6FD]"></span>
-                  Instant Discovery
-                </span>
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
-                  Find related links
-                  <br />
-                  in one click
-                </h2>
-                <p className="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
-                  Hover over any bookmark and click 'More like this.' Our AI
-                  instantly finds similar content using semantic similarity—no
-                  more digging through folders or endless scrolling.
-                </p>
-
-                <ul className="space-y-4 mt-2">
-                  <li className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#BAE6FD] flex items-center justify-center mt-0.5">
-                      <Check className="w-3.5 h-3.5 text-gray-900 stroke-[3]" />
+        {/* SECTION 6: BEAUTIFUL LAYOUTS */}
+        <section className="w-full py-20 px-6 bg-gray-50">
+           <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-10">View your research your way</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                 {/* Layout Items */}
+                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                    <div className="w-full aspect-video bg-gray-100 rounded-lg flex flex-wrap p-1 gap-1 content-start">
+                       <div className="w-[45%] h-6 bg-gray-200 rounded-sm"></div>
+                       <div className="w-[45%] h-6 bg-gray-200 rounded-sm"></div>
+                       <div className="w-[45%] h-6 bg-gray-200 rounded-sm"></div>
                     </div>
-                    <span className="text-base text-gray-700">
-                      Discovers connections you didn't know existed
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#BAE6FD] flex items-center justify-center mt-0.5">
-                      <Check className="w-3.5 h-3.5 text-gray-900 stroke-[3]" />
+                    <span className="text-sm font-medium text-gray-700">Grid</span>
+                 </div>
+                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                    <div className="w-full aspect-video bg-gray-100 rounded-lg flex gap-1 p-1">
+                       <div className="flex-1 flex flex-col gap-1">
+                          <div className="bg-gray-200 h-8 rounded-sm"></div>
+                          <div className="bg-gray-200 h-4 rounded-sm"></div>
+                       </div>
+                       <div className="flex-1 flex flex-col gap-1">
+                          <div className="bg-gray-200 h-4 rounded-sm"></div>
+                          <div className="bg-gray-200 h-8 rounded-sm"></div>
+                       </div>
                     </div>
-                    <span className="text-base text-gray-700">
-                      Powered by cosine similarity search
-                    </span>
-                  </li>
-                </ul>
+                    <span className="text-sm font-medium text-gray-700">Moodboard</span>
+                 </div>
+                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                    <div className="w-full aspect-video bg-gray-100 rounded-lg flex flex-col justify-center p-2 relative">
+                        <div className="absolute left-1/2 top-2 bottom-2 w-0.5 bg-gray-300 -translate-x-1/2"></div>
+                        <div className="w-8 h-4 bg-gray-200 rounded-sm self-start mb-1"></div>
+                        <div className="w-8 h-4 bg-gray-200 rounded-sm self-end"></div>
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">Timeline</span>
+                 </div>
+                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                    <div className="w-full aspect-video bg-gray-100 rounded-lg flex flex-col gap-1 p-2">
+                        <div className="w-full h-2 bg-gray-200 rounded-sm"></div>
+                        <div className="w-full h-2 bg-gray-200 rounded-sm"></div>
+                        <div className="w-full h-2 bg-gray-200 rounded-sm"></div>
+                        <div className="w-full h-2 bg-gray-200 rounded-sm"></div>
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">List</span>
+                 </div>
               </div>
-
-              {/* Visual RIGHT */}
-              <div className="relative order-2">
-                <div className="absolute -inset-4 bg-[#BAE6FD]/30 rounded-full blur-3xl opacity-50"></div>
-                <div className="relative bg-white rounded-xl shadow-lg border border-gray-200 p-6 overflow-visible">
-                  {/* Main Card */}
-                  <div className="flex gap-4 mb-4">
-                    <div className="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center text-2xl">
-                      ⚡️
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900">
-                        The Future of Interface Design
-                      </h3>
-                      <p className="text-sm text-gray-500">smashingmagazine.com</p>
-                    </div>
-                  </div>
-
-                  {/* Action Button */}
-                  <button className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 hover:bg-[#BAE6FD]/20 border border-gray-200 rounded-md text-xs font-medium text-gray-700 transition-colors mb-2">
-                    <Wand2 className="w-3.5 h-3.5 stroke-[1.5]" />
-                    More like this
-                  </button>
-
-                  {/* Popover Simulation */}
-                  <div className="absolute top-[80%] -left-8 md:-left-12 w-64 bg-white rounded-lg shadow-xl border border-gray-200 p-3 z-10 animate-bounce" style={{ animationDuration: '3s' }}>
-                    <div className="text-[10px] font-semibold text-gray-400 uppercase mb-2 px-1">
-                      Similar Content
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-md cursor-pointer">
-                        <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-                        <span className="text-xs text-gray-700 truncate">
-                          Gestalt Principles in UI
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-md cursor-pointer">
-                        <div className="w-1 h-1 rounded-full bg-gray-400"></div>
-                        <span className="text-xs text-gray-700 truncate">
-                          Micro-interactions Guide
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+           </div>
         </section>
 
-        {/* SECTION 3: AI ORGANIZATION */}
-        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white">
-          <div className="max-w-7xl mx-auto relative z-10">
-            <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-              {/* Visual LEFT */}
-              <div className="relative order-2 lg:order-1">
-                <div className="absolute inset-0 bg-gradient-to-bl from-[#DDD6FE]/20 to-[#A7F3D0]/10 rounded-3xl blur-2xl"></div>
-                <div className="relative bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                  <div className="bg-gray-50 border-b border-gray-100 px-4 py-2 flex items-center justify-between">
-                    <span className="text-xs font-medium text-gray-500">
-                      Edit Bookmark
-                    </span>
-                    <X className="w-4 h-4 text-gray-400 stroke-[1.5]" />
-                  </div>
-                  <div className="p-6">
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
-                          Tags
-                        </label>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-[#DDD6FE]/20 text-indigo-700 border border-[#DDD6FE]/50">
-                            Machine Learning
-                            <X className="w-3 h-3 ml-1 opacity-50 stroke-[1.5]" />
-                          </span>
-                          <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-[#DDD6FE]/20 text-indigo-700 border border-[#DDD6FE]/50">
-                            Python
-                            <X className="w-3 h-3 ml-1 opacity-50 stroke-[1.5]" />
-                          </span>
-                          <input type="text" placeholder="Add tag..." className="text-xs border-none focus:ring-0 p-1 placeholder-gray-400" />
-                        </div>
-                      </div>
+        {/* SECTION 7: PREMIUM AI DISCOVERY */}
+        <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-gray-900 text-white relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+           <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-                      <div className="pt-2">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Sparkles className="w-3.5 h-3.5 text-purple-500 stroke-[1.5]" />
-                          <span className="text-xs font-medium text-gray-900">
-                            AI Suggestions
-                          </span>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          <button className="px-2 py-1 rounded-md border border-gray-200 bg-gray-50 text-xs text-gray-600 hover:border-purple-200 hover:text-purple-700 hover:bg-purple-50 transition-colors">
-                            + Neural Networks
-                          </button>
-                          <button className="px-2 py-1 rounded-md border border-gray-200 bg-gray-50 text-xs text-gray-600 hover:border-purple-200 hover:text-purple-700 hover:bg-purple-50 transition-colors">
-                            + Data Science
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+           <div className="max-w-7xl mx-auto relative z-10">
+              <div className="flex flex-col items-center text-center mb-20">
+                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-xs font-semibold uppercase tracking-wider text-indigo-300 mb-6">
+                    <Sparkles className="w-3 h-3 fill-current" />
+                    Premium Features
+                 </span>
+                 <h2 className="text-4xl md:text-6xl font-semibold tracking-tight text-white mb-6">
+                    Discover faster with AI
+                 </h2>
+                 <p className="text-xl text-gray-400 max-w-2xl leading-relaxed">
+                    Upgrade to Premium to unlock our advanced AI engine. It reads your bookmarks so you can find connections you didn't know existed.
+                 </p>
               </div>
 
-              {/* Content RIGHT */}
-              <div className="flex flex-col gap-6 order-1 lg:order-2">
-                <span className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  <span className="w-2 h-2 rounded-full bg-[#DDD6FE]"></span>
-                  Effortless Organization
-                </span>
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
-                  Let AI organize while
-                  <br />
-                  you focus on research
-                </h2>
-                <p className="text-lg text-gray-600 font-normal leading-relaxed max-w-lg">
-                  Every bookmark gets smart tags and collection suggestions
-                  automatically the moment you save it. No manual filing, no messy
-                  folders, no forgotten links.
-                </p>
+              <div className="grid md:grid-cols-2 gap-12">
+                 {/* Feature 1: Semantic Search */}
+                 <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center mb-6">
+                       <Search className="w-6 h-6 stroke-[2]" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">Semantic Search</h3>
+                    <p className="text-gray-400 mb-8 leading-relaxed">
+                       Don't remember the exact title? No problem. Search for concepts like "climate change solutions" and our AI will find that article about renewable energy—even if the keywords don't match.
+                    </p>
+                    <SemanticSearchVisual />
+                 </div>
 
-                <ul className="space-y-4 mt-2">
-                  <li className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DDD6FE] flex items-center justify-center mt-0.5">
-                      <Check className="w-3.5 h-3.5 text-gray-900 stroke-[3]" />
+                 {/* Feature 2: Discovery AI */}
+                 <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center mb-6">
+                       <Wand2 className="w-6 h-6 stroke-[2]" />
                     </div>
-                    <span className="text-base text-gray-700">
-                      AI-suggested tags based on content analysis
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DDD6FE] flex items-center justify-center mt-0.5">
-                      <Check className="w-3.5 h-3.5 text-gray-900 stroke-[3]" />
-                    </div>
-                    <span className="text-base text-gray-700">
-                      Smart collection recommendations
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DDD6FE] flex items-center justify-center mt-0.5">
-                      <Check className="w-3.5 h-3.5 text-gray-900 stroke-[3]" />
-                    </div>
-                    <span className="text-base text-gray-700">
-                      Organize hundreds of bookmarks in seconds
-                    </span>
-                  </li>
-                </ul>
+                    <h3 className="text-2xl font-bold text-white mb-4">Discovery AI</h3>
+                    <p className="text-gray-400 mb-8 leading-relaxed">
+                       Found a perfect source? Use Discovery to instantly surface every other bookmark in your library that is conceptually similar. It's like magic for literature reviews.
+                    </p>
+                    <DiscoveryVisual />
+                 </div>
               </div>
-            </div>
-          </div>
+           </div>
         </section>
 
-        {/* SECTION 4: BEAUTIFUL LAYOUTS */}
-        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50">
-          <div className="max-w-6xl mx-auto relative z-10">
-            {/* Header Content */}
-            <div className="flex flex-col items-center text-center mb-16 md:mb-20">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500 mb-6">
-                <span className="w-2 h-2 rounded-full bg-[#FDE68A]"></span>
-                Your Way
-              </span>
-              <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-6">
-                Four gorgeous ways to
-                <br />
-                view your research
-              </h2>
-              <p className="text-lg text-gray-600 font-normal leading-relaxed max-w-2xl">
-                Switch between layouts based on your mood and task. From visual
-                inspiration boards to detailed lists—find what works for you.
-              </p>
-            </div>
-
-            {/* Grid of Screenshots */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {/* Grid View */}
-              <div className="group">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 aspect-[4/3] p-4 flex flex-wrap content-start gap-2 overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="w-[45%] h-12 bg-gray-100 rounded-md"></div>
-                  <div className="w-[45%] h-12 bg-gray-100 rounded-md"></div>
-                  <div className="w-[45%] h-12 bg-gray-100 rounded-md"></div>
-                  <div className="w-[45%] h-12 bg-gray-100 rounded-md"></div>
-                </div>
-                <div className="mt-3 text-center text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
-                  Grid
-                </div>
-              </div>
-
-              {/* Moodboard View */}
-              <div className="group">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 aspect-[4/3] p-4 flex gap-2 overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="flex-1 flex flex-col gap-2">
-                    <div className="h-16 bg-gray-100 rounded-md"></div>
-                    <div className="h-10 bg-gray-100 rounded-md"></div>
-                  </div>
-                  <div className="flex-1 flex flex-col gap-2 pt-4">
-                    <div className="h-8 bg-gray-100 rounded-md"></div>
-                    <div className="h-16 bg-gray-100 rounded-md"></div>
-                  </div>
-                </div>
-                <div className="mt-3 text-center text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
-                  Moodboard
-                </div>
-              </div>
-
-              {/* Timeline View */}
-              <div className="group">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 aspect-[4/3] p-4 relative overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="absolute left-1/2 top-4 bottom-4 w-0.5 bg-gray-100 -translate-x-1/2"></div>
-                  <div className="relative z-10 flex flex-col gap-4">
-                    <div className="self-start w-12 h-6 bg-gray-100 rounded-md ml-2"></div>
-                    <div className="self-end w-12 h-6 bg-gray-100 rounded-md mr-2"></div>
-                    <div className="self-start w-12 h-6 bg-gray-100 rounded-md ml-2"></div>
-                  </div>
-                </div>
-                <div className="mt-3 text-center text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
-                  Timeline
-                </div>
-              </div>
-
-              {/* List View */}
-              <div className="group">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 aspect-[4/3] p-4 flex flex-col gap-2 overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="w-full h-4 bg-gray-100 rounded-sm"></div>
-                  <div className="w-full h-4 bg-gray-100 rounded-sm"></div>
-                  <div className="w-full h-4 bg-gray-100 rounded-sm"></div>
-                  <div className="w-full h-4 bg-gray-100 rounded-sm"></div>
-                  <div className="w-full h-4 bg-gray-100 rounded-sm"></div>
-                </div>
-                <div className="mt-3 text-center text-sm font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
-                  List
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* SECTION 6: WAVE GOODBYE & STATS */}
+        {/* SECTION 8: WAVE GOODBYE (KEPT AS IS) */}
         <section className="w-full relative px-6 md:px-12 py-24 md:py-40" style={{ backgroundImage: 'radial-gradient(at 0% 0%, rgba(127, 232, 184, 0.1) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(196, 181, 253, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(125, 211, 252, 0.1) 0px, transparent 50%), radial-gradient(at 0% 100%, rgba(252, 211, 77, 0.1) 0px, transparent 50%)', backgroundColor: '#FAFAFA' }}>
           <div className="max-w-7xl mx-auto">
             {/* Headline Container - Fixed Alignment */}
@@ -884,18 +669,18 @@ function App() {
           </div>
         </section>
 
-        {/* Bottom Pricing Section */}
-        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50/50 border-t border-gray-200 rounded-b-[2rem]">
+        {/* Bottom Pricing Section (UPDATED) */}
+        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white border-t border-gray-200">
           <div className="max-w-4xl mx-auto relative z-10">
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500 mb-6">
                 Pricing
               </div>
               <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-4">
-                Simple pricing for smarter bookmarking
+                Start reading for free
               </h2>
               <p className="text-lg text-gray-600 font-normal">
-                Start free, upgrade when you need AI-powered discovery
+                Core features and Reader Mode are always free. Upgrade for AI discovery.
               </p>
             </div>
             <div className="flex justify-center items-center gap-4 mb-16">
@@ -912,20 +697,21 @@ function App() {
                 Billed Yearly
               </span>
               <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100" id="annual-savings">
-                Save ~28%
+                Save ~33%
               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
+              {/* Free Tier */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full hover:shadow-lg transition-shadow">
                 <div className="p-8 pb-0">
                   <div className="w-12 h-12 rounded-xl bg-[#A7F3D0]/30 flex items-center justify-center mb-6 text-emerald-700">
-                    <Bookmark className="w-6 h-6 stroke-[1.5]" />
+                    <BookOpen className="w-6 h-6 stroke-[1.5]" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Start Smart
+                    Free
                   </h3>
                   <p className="text-sm text-gray-500 mb-6 h-10 leading-relaxed">
-                    Perfect for trying LinkLens
+                    Everything you need to save and read.
                   </p>
                   <div className="flex items-baseline gap-1 mb-8">
                     <span className="text-5xl font-semibold tracking-tight text-gray-900">
@@ -935,47 +721,41 @@ function App() {
                       Forever
                     </span>
                   </div>
-                  <button className="w-full bg-gray-900 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200">
-                    Get Started Free
+                  <button className="w-full bg-gray-100 text-gray-900 rounded-xl py-2.5 text-sm font-medium hover:bg-gray-200 transition-colors">
+                    Get Started
                   </button>
                 </div>
                 <div className="p-8 bg-gray-50 mt-8 flex-1 border-t border-gray-100">
                   <ul className="space-y-4">
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5" />
-                      100 bookmarks
+                      75 bookmarks
                     </li>
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5" />
-                      5 collections
+                      10 collections
                     </li>
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5" />
-                      AI-powered tags
+                      AI Auto-tagging
                     </li>
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5" />
-                      AI collection suggestions
+                      Smart Collection Filing
                     </li>
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5" />
-                      Reader mode
+                      <strong>Reader Mode</strong> (Distraction free)
                     </li>
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5" />
-                      4 beautiful layouts
-                    </li>
-                    <li className="flex items-start gap-3 text-sm text-gray-600">
-                      <Check className="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5" />
-                      Chrome extension
-                    </li>
-                    <li className="flex items-start gap-3 text-sm text-gray-600">
-                      <Check className="w-4 h-4 text-emerald-500 stroke-[2] mt-0.5" />
-                      Basic search
+                      All 4 Layouts included
                     </li>
                   </ul>
                 </div>
               </div>
+
+              {/* Pro Tier */}
               <div className="relative bg-white rounded-2xl shadow-xl border border-transparent overflow-hidden flex flex-col h-full ring-1 ring-[#DDD6FE] shadow-indigo-100">
                 <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#A7F3D0] via-[#BAE6FD] to-[#DDD6FE]"></div>
                 <div className="absolute top-5 right-5 bg-[#DDD6FE]/20 text-indigo-900 text-[10px] font-bold px-2.5 py-1 rounded-full border border-[#DDD6FE]/50 uppercase tracking-wide">
@@ -986,22 +766,22 @@ function App() {
                     <Sparkles className="w-6 h-6 stroke-[1.5]" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Discover Faster
+                    Pro
                   </h3>
                   <p className="text-sm text-gray-500 mb-6 h-10 leading-relaxed">
-                    Unlock AI-powered discovery
+                    Unlock AI superpowers.
                   </p>
                   <div className="relative h-20 mb-1 w-full">
                     <div className={`absolute left-0 top-0 flex items-baseline gap-1 transition-all duration-500 ease-out transform origin-top ${!isYearly ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0 pointer-events-none'}`}>
                       <span className="text-5xl font-semibold tracking-tight text-gray-900">
-                        $7
+                        $6
                       </span>
                       <span className="text-base font-medium text-gray-500">/mo</span>
                     </div>
                     <div className={`absolute left-0 top-0 flex flex-col items-start transition-all duration-500 ease-out transform origin-top ${isYearly ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'}`}>
                       <div className="flex items-baseline gap-1">
                         <span className="text-5xl font-semibold tracking-tight text-gray-900">
-                          $5
+                          $4
                         </span>
                         <span className="text-base font-medium text-gray-500">
                           /mo
@@ -1009,7 +789,7 @@ function App() {
                       </div>
                       <div className="flex items-center gap-2 mt-2">
                         <span className="text-sm text-gray-500 font-medium">
-                          Billed annually at $60
+                          Billed annually at $48
                         </span>
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#A7F3D0] text-emerald-800 tracking-wide uppercase">
                           Save $24
@@ -1018,8 +798,8 @@ function App() {
                     </div>
                   </div>
 
-                  <button className="w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl py-2.5 text-sm font-medium shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all hover:translate-y-px">
-                    Start 14-Day Free Trial
+                  <button className="w-full bg-gray-900 text-white rounded-xl py-2.5 text-sm font-medium shadow-lg shadow-gray-900/10 hover:shadow-gray-900/20 transition-all hover:translate-y-px">
+                    Start 7-Day Free Trial
                   </button>
                   <p className="text-center text-xs text-gray-400 mt-3 font-medium">
                     No credit card required
@@ -1043,23 +823,15 @@ function App() {
                     </li>
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-violet-500 stroke-[2] mt-0.5" />
-                      Semantic search
+                      <strong>Semantic Search</strong> (Search by meaning)
                     </li>
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-violet-500 stroke-[2] mt-0.5" />
-                      "More like this" discovery
+                      <strong>Discovery AI</strong> (Find connections)
                     </li>
                     <li className="flex items-start gap-3 text-sm text-gray-600">
                       <Check className="w-4 h-4 text-violet-500 stroke-[2] mt-0.5" />
-                      Bulk organization
-                    </li>
-                    <li className="flex items-start gap-3 text-sm text-gray-600">
-                      <Check className="w-4 h-4 text-violet-500 stroke-[2] mt-0.5" />
-                      Export your data
-                    </li>
-                    <li className="flex items-start gap-3 text-sm text-gray-600">
-                      <Check className="w-4 h-4 text-violet-500 stroke-[2] mt-0.5" />
-                      Priority support
+                      Export & Backup
                     </li>
                   </ul>
                 </div>
@@ -1068,7 +840,7 @@ function App() {
             <div className="mt-16 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-gray-500">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-gray-400 stroke-[1.5]" />
-                14-day free trial
+                7-day free trial
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-gray-400 stroke-[1.5]" />
@@ -1082,8 +854,8 @@ function App() {
           </div>
         </section>
 
-        {/* SECTION 5: USE CASES */}
-        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white">
+        {/* SECTION 5: USE CASES (Kept) */}
+        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50">
           <div className="max-w-7xl mx-auto relative z-10">
             {/* Header */}
             <div className="flex flex-col items-center text-center mb-16">
@@ -1169,32 +941,43 @@ function App() {
                 </div>
 
                 {/* Visual Side */}
-                <div className={`rounded-2xl border border-gray-100 bg-gray-50/50 flex items-center justify-center min-h-[300px] md:min-h-[400px] transition-colors duration-500`}>
-                   <div className="relative group">
-                      <div className={`absolute inset-0 rounded-full blur-2xl opacity-40 transition-colors duration-500 ${
-                          activeTab === 'students' ? 'bg-emerald-200' :
-                          activeTab === 'researchers' ? 'bg-violet-200' :
-                          activeTab === 'educators' ? 'bg-sky-200' :
-                          'bg-amber-200'
-                      }`}></div>
-                      <div className="relative transform transition-transform duration-500 hover:scale-110">
-                        {(() => {
-                          const Icon = {
-                            bookmark: Bookmark,
-                            search: Search,
-                            layout: LayoutGrid,
-                            sparkles: Sparkles
-                          }[tabContent[activeTab].iconName];
-                          const colorClass = {
-                            bookmark: "text-emerald-200",
-                            search: "text-violet-200",
-                            layout: "text-sky-200",
-                            sparkles: "text-amber-200"
-                          }[tabContent[activeTab].iconName];
-                          return <Icon className={`w-32 h-32 ${colorClass}`} strokeWidth={1} />;
-                        })()}
-                      </div>
-                   </div>
+                <div className="rounded-2xl border border-gray-100 bg-gray-50/50 overflow-hidden min-h-[300px] md:min-h-[400px] relative">
+                   {activeTab === 'students' ? (
+                      <StudentVisual />
+                   ) : activeTab === 'researchers' ? (
+                      <ResearcherVisual />
+                   ) : activeTab === 'educators' ? (
+                      <EducatorVisual />
+                   ) : activeTab === 'creators' ? (
+                      <CreatorVisual />
+                   ) : (
+                     <div className="absolute inset-0 flex items-center justify-center">
+                       <div className="relative group">
+                          <div className={`absolute inset-0 rounded-full blur-2xl opacity-40 transition-colors duration-500 ${
+                              activeTab === 'researchers' ? 'bg-violet-200' :
+                              activeTab === 'educators' ? 'bg-sky-200' :
+                              'bg-amber-200'
+                          }`}></div>
+                          <div className="relative transform transition-transform duration-500 hover:scale-110">
+                            {(() => {
+                              const Icon = {
+                                bookmark: Bookmark,
+                                search: Search,
+                                layout: LayoutGrid,
+                                sparkles: Sparkles
+                              }[tabContent[activeTab].iconName];
+                              const colorClass = {
+                                bookmark: "text-emerald-200",
+                                search: "text-violet-200",
+                                layout: "text-sky-200",
+                                sparkles: "text-amber-200"
+                              }[tabContent[activeTab].iconName];
+                              return <Icon className={`w-32 h-32 ${colorClass}`} strokeWidth={1} />;
+                            })()}
+                          </div>
+                       </div>
+                     </div>
+                   )}
                 </div>
               </div>
             </div>
@@ -1215,8 +998,8 @@ function App() {
           </div>
         </section>
 
-        {/* SECTION 7: FAQ */}
-        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50 border-t border-gray-200">
+        {/* SECTION 9: FAQ */}
+        <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white border-t border-gray-200">
           <div className="max-w-6xl mx-auto relative z-10">
             {/* Header */}
             <div className="flex flex-col items-center text-center mb-16">
@@ -1300,7 +1083,7 @@ function App() {
           </div>
         </section>
 
-        {/* SECTION 8: FINAL CTA */}
+        {/* SECTION 10: FINAL CTA */}
         <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white">
           <div className="max-w-4xl mx-auto relative z-10 text-center flex flex-col items-center">
             <h2 className="text-4xl md:text-6xl font-semibold tracking-tight text-gray-900 mb-6 leading-tight">
@@ -1311,7 +1094,7 @@ function App() {
               {' '}smarter today
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mb-10 font-normal leading-relaxed">
-              Join hundreds of students and researchers finding their bookmarks faster with AI
+              Join hundreds of students and researchers finding their bookmarks faster with LinkLens.
             </p>
 
             <div className="w-full max-w-md flex flex-col gap-4">
@@ -1326,7 +1109,7 @@ function App() {
                 </button>
               </div>
               <p className="text-sm text-gray-500 font-medium">
-                No credit card required • 100 bookmarks free forever
+                No credit card required • 75 bookmarks free forever
               </p>
             </div>
           </div>
@@ -1336,14 +1119,13 @@ function App() {
         <footer className="w-full bg-white border-t border-gray-100 pt-16 pb-8 px-6 md:px-12">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
-              {/* Brand Column */}
               <div className="md:col-span-1">
-                <div className="flex items-center gap-2 mb-4">
-                  <iconify-icon icon="solar:bookmark-square-minimalistic-bold-duotone" className="text-gray-900 text-2xl"></iconify-icon>
-                  <span className="text-lg font-bold tracking-tight text-gray-900">LinkLens</span>
+                <div className="flex items-center gap-0.5 mb-4">
+                  <img src="/logo-prism.png" alt="LinkLens" className="w-9 h-9 object-contain" />
+                  <span className="text-lg font-bold tracking-tight text-gray-900 -ml-1">LinkLens</span>
                 </div>
                 <p className="text-sm text-gray-500 leading-relaxed mb-6">
-                  AI-powered bookmarking for the curious.
+                  Save, organize, and read in one place.
                 </p>
                 <a href="mailto:hello@linklens.com" className="flex items-center gap-2 text-sm font-medium text-gray-900 hover:text-indigo-600 transition-colors">
                   <Mail className="w-4 h-4" />
