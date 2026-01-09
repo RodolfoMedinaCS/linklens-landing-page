@@ -276,7 +276,7 @@ const HighlightsVisual = () => {
   };
 
   return (
-    <div className="w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 relative bg-[#FBFBFB] flex flex-col font-sans">
+    <div className="w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 relative bg-[#FBFBFB] flex flex-col font-sans min-h-0">
        {/* Fake Browser/Reader Header to sell the 'Mode' */}
        <div className="h-12 border-b border-gray-200 bg-white flex items-center px-4 justify-between shrink-0">
           <div className="flex gap-2">
@@ -287,10 +287,10 @@ const HighlightsVisual = () => {
           <div className="w-4"></div> 
        </div>
 
-       <div className="flex-1 overflow-y-auto bg-white p-8 md:p-12">
-          <div className="max-w-2xl mx-auto prose prose-lg prose-slate select-none">
+       <div className="flex-1 overflow-y-auto bg-white p-8 md:p-10">
+          <div className="max-w-2xl mx-auto prose prose-slate select-none">
             <span className="block text-sm font-semibold text-indigo-600 mb-2 uppercase tracking-wide">Technology</span>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6 leading-tight">AI—The good, the bad, and the scary</h1>
+            <h1 className="text-3xl font-serif font-bold text-gray-900 mb-6 leading-tight">AI—The good, the bad, and the scary</h1>
             
             <div className="flex items-center gap-3 text-sm text-gray-500 mb-8 border-b border-gray-100 pb-8">
                 <span className="font-medium text-gray-900">Virginia Tech Engineering</span>
@@ -353,17 +353,11 @@ const HighlightsVisual = () => {
                     )}
                   </AnimatePresence>
                </span>
-               {" "}Those surveyed shared that they think people would do a better job of administering medicine, writing laws, and even choosing gifts, just to name a few.
+               {" "}Those surveyed shared that they think people would do a better job of administering medicine and choosing gifts.
             </p>
 
-            <p className="mb-8 text-gray-700 leading-relaxed">
-               The faculty in the College of Engineering have their own opinions based on their expertise and related research. We wanted to hear from some of the most well-versed in the AI space to learn more about how this technology impacts us.
-            </p>
-
-            <h3 className="text-xl font-bold text-gray-900 mb-2 mt-8">Dylan Losey</h3>
-            <p className="text-sm font-medium text-gray-500 mb-4 uppercase tracking-wide border-l-2 border-gray-200 pl-3">Assistant Professor, Mechanical Engineering</p>
-            <p className="text-gray-700 leading-relaxed">
-               Losey explores the intersection of human-robot interaction by developing learning and control algorithms that create intelligent, proactive, and adaptable robots...
+            <p className="mb-6 text-gray-700 leading-relaxed">
+               The faculty in the College of Engineering have their own opinions based on their expertise and related research. We wanted to hear from some of the most well-versed in the space.
             </p>
           </div>
        </div>
@@ -449,7 +443,7 @@ export const ReaderModeSpotlightV2 = memo(() => {
     <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 h-[600px]">
        
        {/* Left Column: Navigation (Flex 1 to stretch) */}
-       <div className="lg:col-span-4 flex flex-col gap-4 h-full">
+       <div className="lg:col-span-4 flex flex-col gap-3 h-full">
           {FEATURES.map((feature) => {
              const isActive = activeFeature === feature.id;
              const Icon = feature.icon;
@@ -478,8 +472,8 @@ export const ReaderModeSpotlightV2 = memo(() => {
                    key={feature.id}
                    onClick={() => setActiveFeature(feature.id)}
                    className={clsx(
-                      "flex-1 p-6 rounded-2xl border text-left transition-all duration-300 group flex flex-col justify-center cursor-pointer", // Added flex-1 and justify-center
-                      isActive ? `${activeClasses[feature.id]} shadow-sm scale-[1.02]` : "border-gray-100 bg-gray-50 hover:border-gray-200 hover:bg-white"
+                      "flex-1 p-5 rounded-2xl border text-left transition-all duration-300 group flex flex-col justify-center cursor-pointer", // Added flex-1 and justify-center
+                      isActive ? `${activeClasses[feature.id]} shadow-sm` : "border-gray-100 bg-gray-50 hover:border-gray-200 hover:bg-white"
                    )}>
                    <div className={clsx(
                       "w-10 h-10 rounded-lg border flex items-center justify-center mb-4 transition-colors",

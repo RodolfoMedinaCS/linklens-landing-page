@@ -27,7 +27,6 @@ export const EducatorVisual = () => {
            </div>
            <h3 className="text-lg font-bold text-gray-900 leading-tight">Psychology 101: Human Behavior & Cognition</h3>
            <div className="flex items-center gap-4 mt-3 text-xs text-gray-500">
-              <span className="flex items-center gap-1.5"><Users className="w-4 h-4" /> 142 Students</span>
               <span className="flex items-center gap-1.5"><Globe className="w-4 h-4" /> Public Link</span>
            </div>
         </div>
@@ -71,22 +70,6 @@ export const EducatorVisual = () => {
               </button>
            </div>
         </div>
-      </motion.div>
-
-      {/* Floating Status Card */}
-      <motion.div 
-         initial={{ x: 20, opacity: 0 }}
-         animate={{ x: 0, opacity: 1 }}
-         transition={{ delay: 0.4 }}
-         className="absolute top-16 right-6 bg-white p-4 rounded-2xl shadow-2xl border border-sky-100 z-20 flex items-center gap-4 w-48 scale-110"
-      >
-         <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 shadow-inner">
-            <Users className="w-5 h-5" />
-         </div>
-         <div className="flex-1 min-w-0">
-            <div className="text-xs font-bold text-gray-900 truncate">New View</div>
-            <div className="text-[10px] text-gray-500 italic truncate">Student #142 joined</div>
-         </div>
       </motion.div>
     </div>
   );

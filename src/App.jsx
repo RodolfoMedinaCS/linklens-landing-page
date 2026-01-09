@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { RevealOnScroll } from './components/RevealOnScroll';
 import { HeroBackgroundIcons } from './components/HeroBackgroundIcons';
 import {
   Menu, BookmarkPlus, Sparkles, Search, LayoutGrid, Star, Clock, FileCode2,
@@ -260,31 +262,69 @@ function App() {
         <HeroBackgroundIcons />
 
         {/* Hero Content */}
-        <div className="relative z-10 flex flex-col items-center pt-24 pb-16 md:pt-32 md:pb-24 text-center px-4 md:px-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 border border-white shadow-sm mb-6 md:mb-8 backdrop-blur-sm max-w-full">
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.1
+              }
+            }
+          }}
+          className="relative z-10 flex flex-col items-center pt-24 pb-16 md:pt-32 md:pb-24 text-center px-4 md:px-6"
+        >
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+            }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 border border-white shadow-sm mb-6 md:mb-8 backdrop-blur-sm max-w-full"
+          >
             <span className="flex h-2 w-2 rounded-full bg-[#A7F3D0] ring-1 ring-emerald-200 flex-shrink-0"></span>
             <span className="text-xs font-medium text-gray-600 tracking-wide truncate">
               Trusted by
               <span className="text-gray-900 font-semibold"> 500+ </span>
               students and researchers
             </span>
-          </div>
+          </motion.div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-gray-900 mb-6 max-w-4xl leading-[1.1] md:leading-[1.1]">
+          <motion.h1 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+            }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight text-gray-900 mb-6 max-w-4xl leading-[1.1] md:leading-[1.1]"
+          >
             Save. Organize. Read.
             <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-sky-400 to-violet-400 font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
               All in one place.
             </span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-xl md:max-w-2xl mb-8 md:mb-10 font-normal leading-relaxed px-2">
+          <motion.p 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+            }}
+            className="text-base sm:text-lg md:text-xl text-gray-600 max-w-xl md:max-w-2xl mb-8 md:mb-10 font-normal leading-relaxed px-2"
+          >
             LinkLens is the modern bookmark manager for students and researchers.
             Save links in one click, organize them in beautiful collections, and
             read distraction-free with powerful tools.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col items-center gap-6 mb-12 md:mb-16 w-full max-w-md mx-auto px-2">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+            }}
+            className="flex flex-col items-center gap-6 mb-12 md:mb-16 w-full max-w-md mx-auto px-2"
+          >
             {SITE_MODE === 'waitlist' ? (
               <>
                 {subscribeStatus === 'success' ? (
@@ -342,10 +382,16 @@ function App() {
             <div className="text-sm font-medium text-gray-500 h-6">
               {SITE_MODE === 'waitlist' && subscribeStatus !== 'success' && 'Be the first to know when we launch'}
             </div>
-          </div>
+          </motion.div>
 
           {/* Browser Mockup */}
-          <div className="relative w-full max-w-5xl mx-auto perspective-[1000px] md:perspective-[2000px] group px-2 md:px-0">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 40, scale: 0.95 },
+              visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: "easeOut" } }
+            }}
+            className="relative w-full max-w-5xl mx-auto perspective-[1000px] md:perspective-[2000px] group px-2 md:px-0"
+          >
             <div 
               ref={dashboardRef}
               style={{ transform: `scale(0.9)` }}
@@ -377,12 +423,13 @@ function App() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* SECTION 2: 3 CORE PILLARS */}
         <section id="features" className="w-full py-20 px-6 border-b border-gray-100 bg-white">
           <div className="max-w-6xl mx-auto">
+            <RevealOnScroll width="100%">
             <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
               {/* Pillar 1: Save */}
               <div className="flex flex-col md:flex-row gap-5 items-center md:items-start group">
@@ -423,12 +470,14 @@ function App() {
                 </div>
               </div>
             </div>
+            </RevealOnScroll>
           </div>
         </section>
 
         {/* SECTION 3: SAVE (CHROME EXTENSION) */}
         <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-white relative overflow-hidden">
            <div className="max-w-7xl mx-auto relative z-10">
+             <RevealOnScroll width="100%">
              <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
                 {/* Content */}
                 <div className="flex flex-col gap-6 order-2 lg:order-1">
@@ -487,12 +536,14 @@ function App() {
                    <ExtensionSpotlight />
                 </div>
              </div>
+             </RevealOnScroll>
            </div>
         </section>
 
         {/* SECTION 4: ORGANIZE (COLLECTIONS) */}
         <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-gray-50/50">
            <div className="max-w-7xl mx-auto">
+             <RevealOnScroll width="100%">
              <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
                 {/* Visual */}
                 <div className="relative flex justify-center">
@@ -534,33 +585,40 @@ function App() {
                   </ul>
                 </div>
              </div>
+             </RevealOnScroll>
            </div>
         </section>
 
         {/* SECTION 5: READER MODE (MAJOR FEATURE) */}
         <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-white border-y border-gray-100">
            <div className="max-w-[1400px] mx-auto">
+             <RevealOnScroll width="100%">
              <div className="text-center max-w-3xl mx-auto mb-20">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 border border-violet-100 text-xs font-semibold uppercase tracking-wider text-violet-700 mb-6">
                    <BookOpen className="w-3 h-3 fill-current" />
                    Reader Mode
                 </span>
                 <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-gray-900 mb-6">
-                   Your research powerhouse.
+                   Focus. Highlight. Cite.
                 </h2>
                 <p className="text-xl text-gray-600 leading-relaxed">
-                   LinkLens isn't just for saving links. It's for reading, understanding, and using them. 
-                   Switch to Reader Mode for a distraction-free experience designed for students.
+                   LinkLens transforms messy web pages into a workspace for your mind. 
+                   Clean up the clutter, capture key insights with smart annotations, and generate 
+                   citations instantly for your papers.
                 </p>
              </div>
+             </RevealOnScroll>
 
-             <ReaderModeSpotlightV2 />
+             <RevealOnScroll width="100%" delay={0.2}>
+               <ReaderModeSpotlightV2 />
+             </RevealOnScroll>
            </div>
         </section>
 
         {/* SECTION 6: BEAUTIFUL LAYOUTS */}
         <section className="w-full py-24 px-6 bg-gray-50/50">
            <div className="max-w-5xl mx-auto">
+              <RevealOnScroll width="100%">
               <div className="text-center max-w-2xl mx-auto mb-16">
                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600 mb-6">
                     <LayoutGrid className="w-3 h-3" />
@@ -573,7 +631,11 @@ function App() {
                     Don't get stuck in a list. Switch between four powerful layouts to visualize your library exactly how you want.
                  </p>
               </div>
-              <LayoutsVisual />
+              </RevealOnScroll>
+              
+              <RevealOnScroll width="100%" delay={0.2}>
+                <LayoutsVisual />
+              </RevealOnScroll>
            </div>
         </section>
 
@@ -583,6 +645,7 @@ function App() {
            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
            <div className="max-w-7xl mx-auto relative z-10">
+              <RevealOnScroll width="100%">
               <div className="flex flex-col items-center text-center mb-20">
                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-xs font-semibold uppercase tracking-wider text-indigo-300 mb-6">
                     <Sparkles className="w-3 h-3 fill-current" />
@@ -595,10 +658,12 @@ function App() {
                     Upgrade to Premium to unlock our advanced AI engine. It reads your bookmarks so you can find connections you didn't know existed.
                  </p>
               </div>
+              </RevealOnScroll>
 
               <div className="grid md:grid-cols-2 gap-12">
                  {/* Feature 1: Semantic Search */}
-                 <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors">
+                 <RevealOnScroll width="100%" delay={0.2} className="h-full">
+                 <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors h-full flex flex-col">
                     <div className="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center mb-6">
                        <Search className="w-6 h-6 stroke-[2]" />
                     </div>
@@ -608,9 +673,11 @@ function App() {
                     </p>
                     <SemanticSearchVisual />
                  </div>
+                 </RevealOnScroll>
 
                  {/* Feature 2: Discovery AI */}
-                 <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors">
+                 <RevealOnScroll width="100%" delay={0.4} className="h-full">
+                 <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors h-full flex flex-col">
                     <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center mb-6">
                        <Wand2 className="w-6 h-6 stroke-[2]" />
                     </div>
@@ -620,6 +687,7 @@ function App() {
                     </p>
                     <DiscoveryVisual />
                  </div>
+                 </RevealOnScroll>
               </div>
            </div>
         </section>
@@ -821,6 +889,7 @@ function App() {
         {/* SECTION 5: USE CASES (Kept) */}
         <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-gray-50">
           <div className="max-w-7xl mx-auto relative z-10">
+            <RevealOnScroll width="100%">
             {/* Header */}
             <div className="flex flex-col items-center text-center mb-10">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500 mb-6">
@@ -958,6 +1027,7 @@ function App() {
                 </div>
               ))}
             </div>
+            </RevealOnScroll>
           </div>
         </section>
 
@@ -970,6 +1040,7 @@ function App() {
         {/* SECTION 9: FAQ */}
         <section id="faq" className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white border-t border-gray-200">
           <div className="max-w-6xl mx-auto relative z-10">
+            <RevealOnScroll width="100%">
             {/* Header */}
             <div className="flex flex-col items-center text-center mb-16">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-semibold uppercase tracking-wider text-gray-500 mb-6">
@@ -1047,12 +1118,14 @@ function App() {
                 ))}
               </div>
             </div>
+            </RevealOnScroll>
           </div>
         </section>
 
         {/* SECTION 10: FINAL CTA */}
         <section className="w-full relative py-24 md:py-32 px-6 md:px-12 bg-white">
           <div className="max-w-4xl mx-auto relative z-10 text-center flex flex-col items-center">
+            <RevealOnScroll width="100%">
             <h2 className="text-4xl md:text-6xl font-semibold tracking-tight text-gray-900 mb-6 leading-tight">
               Start{' '}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A7F3D0] via-[#BAE6FD] to-[#DDD6FE]">
@@ -1103,6 +1176,7 @@ function App() {
                 </form>
               )}
             </div>
+            </RevealOnScroll>
           </div>
         </section>
 

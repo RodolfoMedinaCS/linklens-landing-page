@@ -28,10 +28,11 @@ const MockExtensionUI = () => {
       initial={{ y: 0 }}
       animate={{ y: [-8, 8, -8] }}
       transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      className="w-[360px] sm:w-[420px] bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden font-sans relative mx-auto transform transition-transform duration-500"
+      className="w-[360px] sm:w-[420px] bg-white rounded-2xl shadow-[0_30px_100px_-10px_rgba(0,0,0,0.1),0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-gray-200 font-sans relative mx-auto transform transition-transform duration-500 will-change-transform"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
+      <div className="rounded-2xl overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
         <div className="flex items-center gap-0.5">
           <div className="w-8 h-8 flex items-center justify-center">
              <img src="/logo-prism.png" alt="LinkLens Logo" className="w-full h-full object-contain" />
@@ -185,6 +186,7 @@ const MockExtensionUI = () => {
             <Check className="w-4 h-4" />
             Saved
          </motion.button>
+      </div>
       </div>
     </motion.div>
   );
