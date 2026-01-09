@@ -51,7 +51,7 @@ export const leftFaqs = [
 ];
 
 export const rightFaqs = [
-  { "id": 5, "q": "Do I need a credit card for the free trial?", "a": "No credit card required for the free tier. The 7-day Premium trial also doesn't require a card—just sign up and start using all advanced features instantly." },
+  { "id": 5, "q": "Do I need a credit card for the free trial?", "a": "No credit card required for the free tier. The 14-day Premium trial also doesn't require a card—just sign up and start using all advanced features instantly." },
   { "id": 6, "q": "What makes Reader Mode special?", "a": "Our Reader Mode isn't just for reading—it's for researching. It removes ads, lets you highlight and annotate, and even generates citations (APA, MLA, etc.) instantly." },
   { "id": 7, "q": "Can I cancel my subscription anytime?", "a": "Yes, cancel anytime. No questions asked. You'll keep access until the end of your billing period." },
   { "id": 8, "q": "What's the difference between LinkLens and Raindrop.io?", "a": "LinkLens combines bookmarking with a powerful Reader Mode and AI Discovery. While others just save links, we help you actually read, cite, and rediscover them with semantic AI." },

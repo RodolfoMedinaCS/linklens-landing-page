@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Quote, Highlighter, Check, Copy, X, MessageSquare, GripVertical, Trash2 } from 'lucide-react';
+import { Zap, Quote, Highlighter, Check, Copy, X, MessageSquare, GripVertical, Trash2, MoveHorizontal } from 'lucide-react';
 import { clsx } from 'clsx';
 
 const FEATURES = [
@@ -30,99 +30,103 @@ const FEATURES = [
 // --- 1. Distraction Free Visual (Before/After Slider) ---
 const DistractionFreeVisual = () => {
   const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
   const containerRef = React.useRef(null);
 
-  const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-    setSliderPosition((x / rect.width) * 100);
+  const handleStart = (e) => {
+    setIsDragging(true);
   };
 
-  const handleTouchMove = (e) => {
+  const handleEnd = () => {
+    setIsDragging(false);
+  };
+
+  const handleMove = React.useCallback((clientX) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(e.touches[0].clientX - rect.left, rect.width));
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
     setSliderPosition((x / rect.width) * 100);
-  };
+  }, []);
+
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+      e.preventDefault(); // Prevent text selection
+      handleMove(e.clientX);
+    };
+
+    const onTouchMove = (e) => {
+      if (!isDragging) return;
+      handleMove(e.touches[0].clientX);
+    };
+
+    if (isDragging) {
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', handleEnd);
+      window.addEventListener('touchmove', onTouchMove);
+      window.addEventListener('touchend', handleEnd);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', handleEnd);
+    };
+  }, [isDragging, handleMove]);
 
   return (
     <div 
-      className="relative w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 select-none cursor-ew-resize group"
+      className={clsx(
+        "relative w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 select-none group touch-none",
+        isDragging ? "cursor-grabbing" : "cursor-col-resize"
+      )}
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
+      onMouseDown={handleStart}
+      onTouchStart={handleStart}
     >
-      {/* 1. Cluttered View (Background) */}
-      <div className="absolute inset-0 bg-[#f0f0f0] p-6 overflow-hidden">
-         {/* Fake Ads & Clutter */}
-         <div className="absolute top-0 inset-x-0 h-16 bg-red-500 text-white flex items-center justify-center font-bold text-lg animate-pulse">
-            SALE! 50% OFF EVERYTHING!
-         </div>
-         <div className="absolute top-20 right-4 w-40 h-60 bg-blue-400 flex flex-col items-center justify-center text-white text-center p-2 rounded shadow-lg z-10">
-            <span className="text-2xl mb-2">🎁</span>
-            <span className="font-bold">You won a prize!</span>
-            <button className="mt-4 px-4 py-1 bg-white text-blue-500 rounded text-xs font-bold">Click Here</button>
-         </div>
-         <div className="absolute bottom-4 left-4 w-60 h-24 bg-yellow-300 rounded border border-yellow-400 p-2 z-10">
-            <span className="text-xs font-bold text-yellow-800">Subscribe to our Newsletter!</span>
-            <div className="mt-2 h-8 bg-white rounded border border-yellow-500"></div>
-         </div>
-
-         {/* Content covered by clutter */}
-         <div className="mt-20 max-w-2xl mx-auto opacity-50 blur-[1px]">
-            <h1 className="text-3xl font-serif font-bold text-gray-900 mb-4">The Psychology of Color in UI Design</h1>
-            <div className="h-4 bg-gray-300 rounded w-3/4 mb-6"></div>
-            <div className="space-y-3">
-               <div className="h-3 bg-gray-300 rounded w-full"></div>
-               <div className="h-3 bg-gray-300 rounded w-full"></div>
-               <div className="h-3 bg-gray-300 rounded w-5/6"></div>
-               <div className="h-3 bg-gray-300 rounded w-full"></div>
-            </div>
-         </div>
+      {/* 1. Background Layer: Clean Reader (Visible on Right) */}
+      <div className="absolute inset-0 overflow-hidden">
+        <img 
+          src="/reader-clean.png" 
+          alt="LinkLens Reader View" 
+          className="w-full h-full object-cover object-top"
+        />
       </div>
 
-      {/* 2. Clean View (Foreground - Clipped) */}
+      {/* 2. Foreground Layer: Cluttered Ads (Visible on Left) */}
       <div 
         className="absolute inset-0 bg-white"
         style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
       >
-         <div className="h-full p-8 md:p-12 overflow-y-auto bg-[#FBFBFB]">
-            <div className="max-w-xl mx-auto">
-               <span className="inline-block px-3 py-1 mb-6 text-xs font-medium tracking-wider text-emerald-700 uppercase bg-emerald-50 rounded-full">
-                  LinkLens Reader
-               </span>
-               <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6 leading-tight">
-                  The Psychology of Color in User Interface Design
-               </h1>
-               <div className="flex items-center gap-3 text-sm text-gray-500 mb-8 border-b border-gray-100 pb-8">
-                  <span className="font-medium text-gray-900">By Sarah Anderson</span>
-                  <span>•</span>
-                  <span>8 min read</span>
-               </div>
-               <div className="prose prose-lg prose-gray">
-                  <p className="mb-4 text-gray-700 leading-relaxed">
-                     Color is not just a visual element; it is a language. In the world of digital product design, color communicates meaning, evokes emotion, and guides user behavior without a single word being spoken.
-                  </p>
-                  <p className="text-gray-700 leading-relaxed">
-                     When we look at the most successful applications of the last decade, we see a distinct pattern in how they utilize their color palettes.
-                  </p>
-               </div>
-            </div>
-         </div>
-         
-         {/* Slider Handle */}
-         <div className="absolute top-0 right-0 w-1 h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] z-20">
-            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-indigo-500 transform transition-transform group-hover:scale-110">
-               <GripVertical className="w-4 h-4" />
-            </div>
-         </div>
+         <img 
+            src="/reader-cluttered.png" 
+            alt="Original Webpage with Clutter" 
+            className="w-full h-full object-cover object-top"
+         />
       </div>
-      
-      {/* Label Overlay */}
-      <div className="absolute bottom-6 inset-x-0 flex justify-center pointer-events-none z-30">
-         <div className="bg-black/70 backdrop-blur-md text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg">
-            Drag to compare
+
+      {/* 3. The Physical Divider & Handle (Floating on Top) */}
+      <div 
+        className="absolute inset-y-0 z-30"
+        style={{ left: `${sliderPosition}%` }}
+      >
+         {/* The Black Line */}
+         <div className="absolute inset-y-0 -ml-[1px] w-[2px] bg-black"></div>
+
+         {/* The Handle */}
+         <div className={clsx(
+            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 bg-black rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.4)] flex items-center justify-center text-white transition-transform",
+            isDragging ? "scale-110" : "group-hover:scale-105"
+         )}>
+            <div className="flex items-center gap-1">
+               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M5 1L1 5L5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+               </svg>
+               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+               </svg>
+            </div>
          </div>
       </div>
     </div>
@@ -211,11 +215,12 @@ const CitationVisual = () => {
   );
 };
 
-// --- 3. Highlights Visual ---
+// --- 3. Highlights Visual (Production Accurate) ---
 const HighlightsVisual = () => {
   const [showToolbar, setShowToolbar] = useState(false);
   const [highlightColor, setHighlightColor] = useState(null);
-  const [showNote, setShowNote] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [highlights, setHighlights] = useState([]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -224,12 +229,13 @@ const HighlightsVisual = () => {
       if(isCancelled) return;
       setHighlightColor(null);
       setShowToolbar(false);
-      setShowNote(false);
+      setShowSidebar(false);
+      setHighlights([]);
       await new Promise(r => setTimeout(r, 1000));
 
-      // 2. Select Text (Simulated by showing toolbar immediately for simplicity in loop)
+      // 2. Select Text
       if(isCancelled) return;
-      setShowToolbar(true); // "Text selected"
+      setShowToolbar(true); 
       await new Promise(r => setTimeout(r, 1500));
 
       // 3. Apply Highlight
@@ -237,13 +243,21 @@ const HighlightsVisual = () => {
       setHighlightColor('yellow');
       setShowToolbar(false);
       
-      // 4. Show Note Sidebar
-      await new Promise(r => setTimeout(r, 500));
+      // 4. Show Sidebar & Add Highlight Card
+      await new Promise(r => setTimeout(r, 600));
       if(isCancelled) return;
-      setShowNote(true);
+      setShowSidebar(true);
+      
+      await new Promise(r => setTimeout(r, 400));
+      setHighlights([{
+        id: 1,
+        text: "A recent survey by Forbes indicated that many Americans still trust humans over AI by a large percentage.",
+        color: 'yellow',
+        note: "Useful stat for the introduction - human trust gap."
+      }]);
 
       // 5. Hold
-      await new Promise(r => setTimeout(r, 4000));
+      await new Promise(r => setTimeout(r, 5000));
       
       // 6. Loop
       if(!isCancelled) sequence();
@@ -252,96 +266,173 @@ const HighlightsVisual = () => {
     return () => { isCancelled = true; };
   }, []);
 
+  const colorMap = {
+    yellow: 'bg-yellow-400',
+    pink: 'bg-rose-400',
+    blue: 'bg-blue-400',
+    green: 'bg-emerald-400',
+    purple: 'bg-violet-400',
+    all: 'bg-zinc-200'
+  };
+
   return (
-    <div className="w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 relative bg-[#FBFBFB] flex flex-col">
-       <div className="p-8 md:p-12 prose prose-lg prose-gray max-w-none select-none h-full overflow-hidden">
-          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6">The Impact of Yellow</h2>
-          <p className="mb-6 text-gray-700 leading-relaxed">
-             Yellow is the most luminous of all the colors of the spectrum. It captures our attention more than any other color.
-          </p>
-          <div className="relative inline">
-             <span className={clsx(
-               "transition-colors duration-500 rounded px-0.5 box-decoration-clone leading-relaxed py-0.5",
-               highlightColor === 'yellow' ? "bg-[#fef08a]" : // Tailwind yellow-200
-               showToolbar ? "bg-blue-100" : "" // Selection state
-             )}>
-               In the natural world, yellow is the color of sunflowers and daffodils, egg yolks and lemons, canaries and bees.
-             </span>
-             
-             {/* Floating Toolbar */}
-             <AnimatePresence>
-               {showToolbar && (
-                 <motion.div 
-                   initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                   animate={{ opacity: 1, y: -12, scale: 1 }}
-                   exit={{ opacity: 0, y: 5, scale: 0.9 }}
-                   className="absolute left-1/2 -top-12 -translate-x-1/2 bg-[#1e1e1e] text-white px-1.5 py-1.5 rounded-lg shadow-xl flex items-center gap-1 z-20 whitespace-nowrap border border-[#333]"
-                 >
-                    <div className="flex gap-1 pr-2 border-r border-gray-600">
-                       <button className="w-7 h-7 rounded hover:bg-gray-700 flex items-center justify-center text-yellow-400 transition-colors">
-                          <div className="w-4 h-4 rounded-full bg-yellow-400"></div>
-                       </button>
-                       <button className="w-7 h-7 rounded hover:bg-gray-700 flex items-center justify-center text-green-400 transition-colors">
-                          <div className="w-4 h-4 rounded-full bg-green-400"></div>
-                       </button>
-                       <button className="w-7 h-7 rounded hover:bg-gray-700 flex items-center justify-center text-pink-400 transition-colors">
-                          <div className="w-4 h-4 rounded-full bg-pink-400"></div>
-                       </button>
-                    </div>
-                    <button className="px-2.5 py-1 hover:bg-gray-700 rounded text-xs font-medium flex items-center gap-1.5 transition-colors">
-                       <MessageSquare className="w-3.5 h-3.5" />
-                       Note
-                    </button>
-                 </motion.div>
-               )}
-             </AnimatePresence>
+    <div className="w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 relative bg-[#FBFBFB] flex flex-col font-sans">
+       {/* Fake Browser/Reader Header to sell the 'Mode' */}
+       <div className="h-12 border-b border-gray-200 bg-white flex items-center px-4 justify-between shrink-0">
+          <div className="flex gap-2">
+             <div className="w-3 h-3 rounded-full bg-gray-200"></div>
+             <div className="w-3 h-3 rounded-full bg-gray-200"></div>
           </div>
-          <p className="mt-6 text-gray-700 leading-relaxed">
-             In our contemporary human-made world, yellow is the color of SpongeBob, the Tour de France winner's jersey, happy faces, post-its, and signs that alert us to danger or caution.
-          </p>
-          <p className="mt-6 text-gray-700 leading-relaxed opacity-50">
-             It is the color of happiness, and optimism, of enlightenment and creativity, sunshine and spring.
-          </p>
+          <div className="text-xs font-medium text-gray-400 uppercase tracking-wider">Reader View</div>
+          <div className="w-4"></div> 
+       </div>
+
+       <div className="flex-1 overflow-y-auto bg-white p-8 md:p-12">
+          <div className="max-w-2xl mx-auto prose prose-lg prose-slate select-none">
+            <span className="block text-sm font-semibold text-indigo-600 mb-2 uppercase tracking-wide">Technology</span>
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-6 leading-tight">AI—The good, the bad, and the scary</h1>
+            
+            <div className="flex items-center gap-3 text-sm text-gray-500 mb-8 border-b border-gray-100 pb-8">
+                <span className="font-medium text-gray-900">Virginia Tech Engineering</span>
+                <span>•</span>
+                <span>4 min read</span>
+            </div>
+
+            <p className="mb-6 text-gray-700 leading-relaxed">
+               There is no denying that Artificial Intelligence has changed our lives. However, some might argue if it’s for the better.
+            </p>
+
+            <p className="mb-6 text-gray-700 leading-relaxed">
+               <span className="relative inline">
+                  <span className={clsx(
+                    "transition-colors duration-500 rounded px-0.5 box-decoration-clone leading-relaxed py-0.5",
+                    highlightColor === 'yellow' ? "bg-[#fef08a]" : 
+                    showToolbar ? "bg-blue-100" : "" 
+                  )}>
+                    A recent survey by Forbes indicated that many Americans still trust humans over AI by a large percentage.
+                  </span>
+                  
+                  {/* Production-Accurate Floating Toolbar */}
+                  <AnimatePresence>
+                    {showToolbar && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: -16, scale: 1 }}
+                        exit={{ opacity: 0, y: 5, scale: 0.95 }}
+                        className="absolute left-1/2 -top-12 -translate-x-1/2 bg-zinc-900 text-white p-1.5 rounded-full shadow-2xl flex items-center gap-1.5 z-50 whitespace-nowrap border border-white/10"
+                      >
+                         {/* Colors */}
+                         <div className="flex items-center gap-1 px-1">
+                            {['yellow', 'pink', 'blue', 'green', 'purple'].map((c) => (
+                               <div 
+                                 key={c}
+                                 className={clsx(
+                                     "w-6 h-6 rounded-full transition-transform", 
+                                     c === 'yellow' ? "bg-yellow-300 scale-110 ring-2 ring-yellow-400/50" : 
+                                     c === 'pink' ? "bg-rose-300" :
+                                     c === 'blue' ? "bg-blue-300" :
+                                     c === 'green' ? "bg-emerald-300" :
+                                     "bg-purple-300"
+                                 )}
+                               ></div>
+                            ))}
+                         </div>
+
+                         <div className="w-px h-4 bg-white/20 mx-0.5" />
+
+                         {/* Actions */}
+                         <div className="flex items-center gap-0.5 pr-1">
+                             <div className="p-1.5 rounded-full hover:bg-white/10 text-white/70">
+                                 <MessageSquare className="w-4 h-4" />
+                             </div>
+                         </div>
+
+                         {/* Tail Arrow */}
+                         <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-zinc-900"></div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+               </span>
+               {" "}Those surveyed shared that they think people would do a better job of administering medicine, writing laws, and even choosing gifts, just to name a few.
+            </p>
+
+            <p className="mb-8 text-gray-700 leading-relaxed">
+               The faculty in the College of Engineering have their own opinions based on their expertise and related research. We wanted to hear from some of the most well-versed in the AI space to learn more about how this technology impacts us.
+            </p>
+
+            <h3 className="text-xl font-bold text-gray-900 mb-2 mt-8">Dylan Losey</h3>
+            <p className="text-sm font-medium text-gray-500 mb-4 uppercase tracking-wide border-l-2 border-gray-200 pl-3">Assistant Professor, Mechanical Engineering</p>
+            <p className="text-gray-700 leading-relaxed">
+               Losey explores the intersection of human-robot interaction by developing learning and control algorithms that create intelligent, proactive, and adaptable robots...
+            </p>
+          </div>
        </div>
        
-       {/* Sidebar mock (shows when highlighted) */}
+       {/* Production-Accurate Sidebar */}
        <AnimatePresence>
-          {showNote && (
+          {showSidebar && (
              <motion.div 
-               initial={{ x: "100%", opacity: 0 }}
-               animate={{ x: 0, opacity: 1 }}
-               exit={{ x: "100%", opacity: 0 }}
+               initial={{ x: "100%" }}
+               animate={{ x: 0 }}
+               exit={{ x: "100%" }}
                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-               className="absolute right-0 top-0 bottom-0 w-80 bg-white border-l border-gray-200 shadow-xl z-30 flex flex-col"
+               className="absolute right-0 top-0 bottom-0 w-80 bg-white/95 backdrop-blur-md border-l border-gray-200 shadow-2xl z-40 flex flex-col"
              >
-                <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-                   <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Highlights</span>
-                   <X className="w-4 h-4 text-gray-400" />
+                {/* 1. Header */}
+                <div className="flex items-center justify-between px-4 pt-3 pb-2 text-zinc-900 border-b border-transparent">
+                    <h2 className="font-semibold text-sm tracking-tight">Reader Tools</h2>
+                    <button className="p-1.5 rounded-lg hover:bg-black/5 transition-colors">
+                        <X className="w-4 h-4" />
+                    </button>
                 </div>
-                <div className="p-4">
-                   <div className="p-4 rounded-xl bg-yellow-50 border border-yellow-100 relative group">
-                      <div className="flex gap-3 mb-2">
-                         <Quote className="w-4 h-4 text-yellow-600/50 fill-current shrink-0 mt-0.5" />
-                         <p className="text-sm text-gray-800 font-serif italic line-clamp-3">
-                            "In the natural world, yellow is the color of sunflowers and daffodils..."
-                         </p>
-                      </div>
-                      
-                      <div className="pl-7 mt-3 pt-3 border-t border-yellow-200/50">
-                         <div className="flex items-center gap-2 mb-1">
-                            <div className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-700">R</div>
-                            <span className="text-xs font-medium text-gray-900">You</span>
-                            <span className="text-[10px] text-gray-400">Just now</span>
-                         </div>
-                         <p className="text-xs text-gray-600">
-                            Great quote for the color theory section!
-                         </p>
-                      </div>
 
-                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                         <button className="p-1 hover:bg-yellow-200/50 rounded text-yellow-700"><Trash2 className="w-3 h-3" /></button>
-                      </div>
-                   </div>
+                {/* 2. Tabs */}
+                <div className="px-4 pb-3">
+                    <div className="flex p-1 bg-zinc-100/80 rounded-lg">
+                        <button className="flex-1 py-1.5 text-[13px] font-medium text-zinc-900 bg-white shadow-sm rounded-md transition-all cursor-pointer">Highlights</button>
+                        <button className="flex-1 py-1.5 text-[13px] font-medium text-zinc-500 hover:text-zinc-700 cursor-pointer">Outline</button>
+                    </div>
+                </div>
+
+                {/* 3. Search & Filter Bar */}
+                <div className="px-4 pb-4 pt-2 border-b border-zinc-200 flex flex-col gap-3">
+                    <div className="relative">
+                        <div className="w-full bg-zinc-100/50 border border-zinc-200 rounded-xl h-9 px-3 flex items-center text-sm text-zinc-400">
+                            Search highlights...
+                        </div>
+                    </div>
+                    <div className="flex gap-1">
+                        <div className="w-5 h-5 rounded-full bg-zinc-400 flex items-center justify-center"><Check className="w-2.5 h-2.5 text-white" /></div>
+                        {['yellow', 'pink', 'blue', 'green', 'purple'].map(c => (
+                            <div key={c} className={clsx("w-5 h-5 rounded-full border border-transparent opacity-60", colorMap[c].replace('400', '400/50'))}></div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 4. Highlights List */}
+                <div className="p-4 flex-1 overflow-y-auto">
+                    <AnimatePresence>
+                        {highlights.map((hl) => (
+                            <motion.div 
+                                key={hl.id}
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="p-4 rounded-xl border border-zinc-200 bg-zinc-50/50 shadow-sm transition-all"
+                            >
+                                <div className="flex gap-3">
+                                    <div className="mt-2 w-2 h-2 rounded-full flex-shrink-0 bg-yellow-400"></div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-[13px] leading-relaxed text-zinc-900 line-clamp-4">{hl.text}</p>
+                                        <div className="mt-3 p-2.5 rounded-lg text-xs italic relative bg-black/5 text-zinc-600">
+                                            <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-lg bg-yellow-400"></div>
+                                            <span className="opacity-50 not-italic mr-1.5 font-bold uppercase text-[9px]">Note:</span>
+                                            {hl.note}
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
                 </div>
              </motion.div>
           )}
@@ -350,7 +441,7 @@ const HighlightsVisual = () => {
   );
 };
 
-export const ReaderModeSpotlightV2 = () => {
+export const ReaderModeSpotlightV2 = memo(() => {
   const [activeFeature, setActiveFeature] = useState('distraction');
 
   return (
@@ -387,7 +478,7 @@ export const ReaderModeSpotlightV2 = () => {
                    key={feature.id}
                    onClick={() => setActiveFeature(feature.id)}
                    className={clsx(
-                      "flex-1 p-6 rounded-2xl border text-left transition-all duration-300 group flex flex-col justify-center", // Added flex-1 and justify-center
+                      "flex-1 p-6 rounded-2xl border text-left transition-all duration-300 group flex flex-col justify-center cursor-pointer", // Added flex-1 and justify-center
                       isActive ? `${activeClasses[feature.id]} shadow-sm scale-[1.02]` : "border-gray-100 bg-gray-50 hover:border-gray-200 hover:bg-white"
                    )}>
                    <div className={clsx(
@@ -419,4 +510,4 @@ export const ReaderModeSpotlightV2 = () => {
        </div>
     </div>
   );
-};
+});

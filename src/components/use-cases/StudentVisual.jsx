@@ -61,30 +61,30 @@ export const StudentVisual = () => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-[340px] bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden relative z-10"
+        className="w-[420px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden relative z-10 scale-110"
       >
         {/* Header */}
-        <div className="p-4 flex items-center justify-between border-b border-gray-100">
-            <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-md bg-blue-50 text-blue-600">
-                    <Quote className="w-4 h-4 fill-current" />
+        <div className="p-5 flex items-center justify-between border-b border-gray-100">
+            <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
+                    <Quote className="w-5 h-5 fill-current" />
                 </div>
-                <span className="font-semibold text-sm text-gray-900">Cite this article</span>
+                <span className="font-bold text-base text-gray-900">Cite this article</span>
             </div>
-            <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400">
-                <X className="w-4 h-4" />
+            <button className="p-2 rounded-xl hover:bg-gray-100 text-gray-400">
+                <X className="w-5 h-5" />
             </button>
         </div>
 
-        <div className="p-5 flex flex-col gap-4">
+        <div className="p-6 flex flex-col gap-5">
             {/* Tabs */}
-            <div className="flex p-1 rounded-lg bg-gray-100/80">
+            <div className="flex p-1.5 rounded-xl bg-gray-100/80">
                 {styles.map(style => (
                     <button
                         key={style}
                         onClick={() => setActiveStyle(style)}
                         className={clsx(
-                            "flex-1 py-1.5 text-xs font-medium rounded-md transition-all relative",
+                            "flex-1 py-2 text-sm font-semibold rounded-lg transition-all relative",
                             activeStyle === style 
                                 ? "text-blue-600 shadow-sm bg-white" 
                                 : "text-gray-500 hover:text-gray-700"
@@ -93,7 +93,7 @@ export const StudentVisual = () => {
                         {activeStyle === style && (
                             <motion.div 
                                 layoutId="citation-tab-student"
-                                className="absolute inset-0 bg-white rounded-md shadow-sm z-[-1]"
+                                className="absolute inset-0 bg-white rounded-lg shadow-sm z-[-1]"
                                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                             />
                         )}
@@ -103,7 +103,7 @@ export const StudentVisual = () => {
             </div>
 
             {/* Preview Box */}
-            <div className="p-4 rounded-lg border border-gray-200 bg-gray-50/50 text-sm leading-relaxed font-serif text-gray-800 min-h-[100px]">
+            <div className="p-5 rounded-xl border border-gray-200 bg-gray-50/50 text-base leading-relaxed font-serif text-gray-800 min-h-[120px]">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={activeStyle}
@@ -121,7 +121,7 @@ export const StudentVisual = () => {
             <button
                 onClick={handleCopy}
                 className={clsx(
-                    "w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all shadow-sm",
+                    "w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl text-base font-bold transition-all shadow-sm",
                     isCopied 
                         ? "bg-emerald-500 text-white shadow-emerald-500/20" 
                         : "bg-gray-900 text-white hover:bg-gray-800"
@@ -129,12 +129,12 @@ export const StudentVisual = () => {
             >
                 {isCopied ? (
                     <>
-                        <Check className="w-4 h-4" />
+                        <Check className="w-5 h-5" />
                         Copied to Clipboard
                     </>
                 ) : (
                     <>
-                        <Copy className="w-4 h-4" />
+                        <Copy className="w-5 h-5" />
                         Copy Citation
                     </>
                 )}

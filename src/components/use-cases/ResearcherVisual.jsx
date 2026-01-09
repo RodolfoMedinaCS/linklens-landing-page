@@ -9,7 +9,7 @@ export const ResearcherVisual = () => {
       {/* Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.05)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
-      <div className="relative w-full max-w-[460px] h-[320px]">
+      <div className="relative w-full max-w-[500px] h-[320px] scale-90 sm:scale-100">
          
          {/* Center Node (Source) */}
          <motion.div 
@@ -26,15 +26,15 @@ export const ResearcherVisual = () => {
                   <FileText className="w-5 h-5" />
                </div>
                <h3 className="text-xs font-bold text-gray-900 leading-tight mb-1">The Alignment Problem</h3>
-               <p className="text-[10px] text-gray-500">Christian, 2020</p>
+               <p className="text-[10px] text-gray-500">Brian Christian, 2020</p>
             </div>
          </motion.div>
 
          {/* Connection Lines (SVG) */}
-         <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible" viewBox="0 0 460 320">
+         <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible" viewBox="0 0 500 320">
             {/* Top Right Line */}
             <motion.path 
-               d="M 230 160 L 380 40" 
+               d="M 250 160 L 400 60" 
                fill="none" 
                stroke="#DDD6FE" 
                strokeWidth="2" 
@@ -45,7 +45,7 @@ export const ResearcherVisual = () => {
             />
             {/* Bottom Left Line */}
             <motion.path 
-               d="M 230 160 L 80 280" 
+               d="M 250 160 L 100 260" 
                fill="none" 
                stroke="#DDD6FE" 
                strokeWidth="2" 
@@ -56,7 +56,7 @@ export const ResearcherVisual = () => {
             />
             {/* Bottom Right Line */}
             <motion.path 
-               d="M 230 160 L 380 280" 
+               d="M 250 160 L 400 260" 
                fill="none" 
                stroke="#DDD6FE" 
                strokeWidth="2" 
@@ -69,7 +69,7 @@ export const ResearcherVisual = () => {
 
          {/* Similarity Node 1 */}
          <motion.div 
-            className="absolute top-[-10px] right-[-10px] z-20"
+            className="absolute top-[10px] right-[10px] z-20"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1 }}
@@ -87,7 +87,7 @@ export const ResearcherVisual = () => {
 
          {/* Similarity Node 2 */}
          <motion.div 
-            className="absolute bottom-[-10px] left-[-10px] z-20"
+            className="absolute bottom-[10px] left-[10px] z-20"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2 }}
@@ -105,7 +105,7 @@ export const ResearcherVisual = () => {
 
          {/* Similarity Node 3 */}
          <motion.div 
-            className="absolute bottom-[-10px] right-[-10px] z-20"
+            className="absolute bottom-[10px] right-[10px] z-20"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.4 }}
