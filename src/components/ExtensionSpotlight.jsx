@@ -23,12 +23,19 @@ const SmartSearchIcon = ({ className }) => (
 const PRISM_GRADIENT = "linear-gradient(120deg, #A7F3D0 0%, #BAE6FD 30%, #DDD6FE 60%, #FDE68A 100%)";
 
 const MockExtensionUI = () => {
+  const [isMobile, setIsMobile] = React.useState(true);
+
+  React.useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
   return (
+    <div className="relative">
     <motion.div 
       initial={{ y: 0 }}
-      animate={{ y: [-8, 8, -8] }}
+      animate={isMobile ? {} : { y: [-8, 8, -8] }}
       transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      className="w-full max-w-[360px] sm:max-w-[420px] bg-white rounded-2xl shadow-[0_30px_100px_-10px_rgba(0,0,0,0.1),0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-gray-200 font-sans relative mx-auto transform transition-transform duration-500 will-change-transform"
+      className="w-full max-w-[360px] sm:max-w-[420px] bg-white rounded-2xl shadow-[0_30px_100px_-10px_rgba(0,0,0,0.1),0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-gray-200 font-sans relative mx-auto transform md:will-change-transform"
     >
       <div className="rounded-2xl overflow-hidden">
         {/* Header */}
@@ -146,7 +153,7 @@ const MockExtensionUI = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: tag.delay }}
+                  transition={{ delay: isMobile ? 0 : tag.delay }}
                   className={clsx(
                     "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer",
                     tag.ai 
@@ -189,6 +196,7 @@ const MockExtensionUI = () => {
       </div>
       </div>
     </motion.div>
+    </div>
   );
 };
 
@@ -196,7 +204,7 @@ export const ExtensionSpotlight = () => {
   return (
     <div className="relative py-10">
         {/* Glow behind the card */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-emerald-200/30 via-indigo-200/30 to-amber-200/30 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-emerald-200/30 via-indigo-200/30 to-amber-200/30 rounded-full blur-[60px] md:blur-[100px] -z-10 pointer-events-none"></div>
         
         <div className="relative z-10">
             <MockExtensionUI />
@@ -207,7 +215,7 @@ export const ExtensionSpotlight = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 1 }}
-                className="absolute -left-12 md:-left-28 bottom-32 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-xl border border-white/50 flex items-center gap-2 rotate-[-6deg]"
+                className="hidden md:flex absolute -left-12 md:-left-28 bottom-32 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-xl border border-white/50 items-center gap-2 rotate-[-6deg]"
             >
                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
                 <span className="text-xs font-bold text-gray-800">AI Auto-Tagging</span>
@@ -219,7 +227,7 @@ export const ExtensionSpotlight = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 1.2 }}
-                className="absolute -right-8 md:-right-24 top-24 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-xl border border-white/50 flex items-center gap-2 rotate-[6deg]"
+                className="hidden md:flex absolute -right-8 md:-right-24 top-24 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-xl border border-white/50 items-center gap-2 rotate-[6deg]"
             >
                 <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></div>
                 <span className="text-xs font-bold text-gray-800">Smart Sorting</span>

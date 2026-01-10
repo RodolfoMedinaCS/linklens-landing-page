@@ -201,7 +201,7 @@ export const SemanticSearchVisual = () => {
                              <span className="text-[10px] text-indigo-400 font-medium whitespace-nowrap">{item.match} Match</span>
                           </div>
                        </div>
-                       <ArrowRight className="w-4 h-4 text-slate-600 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />
+                       <ArrowRight className="w-4 h-4 text-slate-600 opacity-100 md:opacity-0 md:group-hover:opacity-100 md:-translate-x-2 md:group-hover:translate-x-0 transition-all shrink-0" />
                     </motion.div>
                   ))}
                </motion.div>

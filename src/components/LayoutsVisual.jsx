@@ -108,8 +108,8 @@ export const LayoutsVisual = () => {
              key={layout.title}
              whileHover={{ y: -6 }}
              className={clsx(
-                "bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden group cursor-pointer transition-all hover:shadow-xl",
-                layout.border
+                "bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden group cursor-pointer transition-all md:hover:shadow-xl",
+                `md:${layout.border}`
              )}
           >
              {/* Visual Container - Taller and more vibrant */}

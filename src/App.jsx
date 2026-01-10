@@ -486,7 +486,7 @@ function App() {
              <RevealOnScroll width="100%">
              <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
                 {/* Content */}
-                <div className="flex flex-col gap-6 order-2 lg:order-1">
+                <div className="flex flex-col gap-6 order-1">
                   <span className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold uppercase tracking-wider text-emerald-700">
                     <Bookmark className="w-3 h-3 fill-current" />
                     Save Content
@@ -538,7 +538,7 @@ function App() {
                 </div>
 
                 {/* Visual */}
-                <div className="relative order-1 lg:order-2 flex justify-center">
+                <div className="relative order-2 flex justify-center">
                    <ExtensionSpotlight />
                 </div>
              </div>
@@ -551,13 +551,8 @@ function App() {
            <div className="max-w-7xl mx-auto">
              <RevealOnScroll width="100%">
              <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-                {/* Visual */}
-                <div className="relative flex justify-center">
-                   <CollectionsTree />
-                </div>
-
                 {/* Content */}
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 order-1">
                   <span className="inline-flex self-start items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-100 text-xs font-semibold uppercase tracking-wider text-sky-700">
                     <LayoutGrid className="w-3 h-3 fill-current" />
                     Organize
@@ -589,6 +584,11 @@ function App() {
                         <span className="text-gray-700">AI suggests where new bookmarks belong</span>
                      </li>
                   </ul>
+                </div>
+
+                {/* Visual */}
+                <div className="relative flex justify-center order-2">
+                   <CollectionsTree />
                 </div>
              </div>
              </RevealOnScroll>

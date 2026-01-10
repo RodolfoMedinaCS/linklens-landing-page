@@ -104,7 +104,7 @@ export const CollectionsTree = () => {
        </div>
 
        {/* Tree Area */}
-       <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-slate-200 space-y-1">
+       <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-slate-200 space-y-1 pointer-events-none md:pointer-events-auto">
           {TREE_DATA.map(node => (
              <TreeNode 
                key={node.id} 
@@ -125,7 +125,7 @@ export const CollectionsTree = () => {
 
        {/* Floating "Icon Cloud" Decorative Element (Bottom Right) */}
        <motion.div 
-          className="absolute bottom-6 right-6"
+          className="hidden md:block absolute bottom-6 right-6"
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
        >
