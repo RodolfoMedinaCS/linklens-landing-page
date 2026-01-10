@@ -1210,13 +1210,13 @@ function App() {
         {/* FOOTER */}
         <footer className="w-full bg-white border-t border-gray-100 pt-16 pb-8 px-6 md:px-12">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
-              <div className="md:col-span-1">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-8 mb-16">
+              <div className="col-span-2 md:col-span-1">
                 <div className="flex items-center gap-0.5 mb-4">
                   <img src="/logo-prism.png" alt="LinkLens" className="w-9 h-9 object-contain" />
                   <span className="text-lg font-bold tracking-tight text-gray-900 -ml-1">LinkLens</span>
                 </div>
-                <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-xs">
                   Save, organize, and read in one place.
                 </p>
                 <a href="mailto:hello@linklens.com" className="flex items-center gap-2 text-sm font-medium text-gray-900 hover:text-indigo-600 transition-colors">
@@ -1226,7 +1226,7 @@ function App() {
               </div>
 
               {/* Links Columns */}
-              <div>
+              <div className="mt-4 md:mt-0">
                 <h4 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wide">Product</h4>
                 <ul className="space-y-3">
                   {footerLinks.product.map((link, idx) => (
