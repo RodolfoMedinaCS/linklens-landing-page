@@ -50,12 +50,17 @@ const DEMO_SCENARIOS = [
 
 export const SemanticSearchVisual = () => {
   const [scenarioIndex, setScenarioIndex] = useState(0);
-  const [phase, setPhase] = useState('idle'); // idle -> typing -> thinking -> results
-  const [typedText, setTypedText] = useState("");
+  // Default to 'results' on mobile ( SSR/Hydration safe way is to check in effect, but for Vite client-side: )
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const [phase, setPhase] = useState(isMobile ? 'results' : 'idle'); 
+  const [typedText, setTypedText] = useState(isMobile ? DEMO_SCENARIOS[0].query : "");
 
   const currentScenario = DEMO_SCENARIOS[scenarioIndex];
 
   useEffect(() => {
+    // Disable animation loop on mobile
+    if (isMobile) return;
+
     let isCancelled = false;
 
     const runSequence = async () => {

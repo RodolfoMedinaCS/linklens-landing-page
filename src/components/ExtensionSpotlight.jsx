@@ -150,8 +150,8 @@ const MockExtensionUI = () => {
               ].map((tag, i) => (
                 <motion.div
                   key={tag.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={isMobile ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                  whileInView={isMobile ? {} : { opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: isMobile ? 0 : tag.delay }}
                   className={clsx(

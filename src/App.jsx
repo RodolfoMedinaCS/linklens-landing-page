@@ -117,11 +117,15 @@ function App() {
     lenis.on('scroll', (e) => {
       const scrollY = e.scroll;
       const isScrolled = scrollY > 20;
+      const isMobile = window.innerWidth < 768;
 
-      // 1. Dashboard Scale Logic (Continuous)
-      if (scrollY < 1000 && dashboardRef.current) {
+      // 1. Dashboard Scale Logic (Continuous) - Desktop Only
+      if (!isMobile && scrollY < 1000 && dashboardRef.current) {
         const scale = Math.min(1.1, 0.9 + (scrollY / 400) * 0.2);
         dashboardRef.current.style.transform = `scale(${scale})`;
+      } else if (isMobile && dashboardRef.current) {
+         // Ensure it's reset on mobile resize
+         dashboardRef.current.style.transform = 'scale(1)';
       }
 
       // 2. Navbar Styling (Conditional - Only update on change)
@@ -386,10 +390,9 @@ function App() {
 
           {/* Browser Mockup */}
           <motion.div 
-            variants={{
-              hidden: { opacity: 0, y: 40, scale: 0.95 },
-              visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: "easeOut" } }
-            }}
+            initial={typeof window !== 'undefined' && window.innerWidth < 768 ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 40, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="relative w-full max-w-5xl mx-auto perspective-[1000px] md:perspective-[2000px] group px-2 md:px-0"
           >
             <div 
