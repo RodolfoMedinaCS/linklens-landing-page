@@ -36,111 +36,122 @@ export const StudentVisual = () => {
   }, []);
 
   return (
-    <div className="w-full h-full min-h-[350px] relative overflow-hidden flex flex-col items-center justify-center p-6 bg-gray-50/50">
+    <div className="w-full h-full min-h-[350px] relative overflow-hidden flex flex-col items-center justify-center p-2 sm:p-6 bg-gray-50/50">
       
-      {/* Background Context (Blurred List) */}
-      <div className="absolute inset-0 p-6 space-y-4 opacity-30 blur-sm pointer-events-none">
-         <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-            <div className="w-10 h-10 rounded bg-emerald-100 flex items-center justify-center text-emerald-600"><FileText className="w-5 h-5" /></div>
-            <div className="flex-1 space-y-2">
-               <div className="h-2 bg-gray-300 rounded w-3/4"></div>
-               <div className="h-2 bg-gray-200 rounded w-1/2"></div>
-            </div>
+      {/* Mobile Simplified View */}
+      <div className="sm:hidden flex flex-col items-center justify-center gap-4 text-center">
+         <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-gray-200 flex items-center justify-center text-emerald-600">
+            <BookOpen className="w-10 h-10" />
          </div>
-         <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-            <div className="w-10 h-10 rounded bg-blue-100 flex items-center justify-center text-blue-600"><FileText className="w-5 h-5" /></div>
-            <div className="flex-1 space-y-2">
-               <div className="h-2 bg-gray-300 rounded w-2/3"></div>
-               <div className="h-2 bg-gray-200 rounded w-1/2"></div>
-            </div>
-         </div>
+         <p className="text-sm font-medium text-gray-500 max-w-[200px]">Perfect for essays & thesis</p>
       </div>
 
-      {/* The Authentic Popover Mockup */}
-      <motion.div 
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-[420px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden relative z-10 scale-110"
-      >
-        {/* Header */}
-        <div className="p-5 flex items-center justify-between border-b border-gray-100">
-            <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
-                    <Quote className="w-5 h-5 fill-current" />
-                </div>
-                <span className="font-bold text-base text-gray-900">Cite this article</span>
-            </div>
-            <button className="p-2 rounded-xl hover:bg-gray-100 text-gray-400">
-                <X className="w-5 h-5" />
-            </button>
+      {/* Desktop Complex View */}
+      <div className="hidden sm:flex flex-col w-full h-full items-center justify-center relative z-10">
+        {/* Background Context (Blurred List) */}
+        <div className="absolute inset-0 p-6 space-y-4 opacity-30 blur-sm pointer-events-none">
+           <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
+              <div className="w-10 h-10 rounded bg-emerald-100 flex items-center justify-center text-emerald-600"><FileText className="w-5 h-5" /></div>
+              <div className="flex-1 space-y-2">
+                 <div className="h-2 bg-gray-300 rounded w-3/4"></div>
+                 <div className="h-2 bg-gray-200 rounded w-1/2"></div>
+              </div>
+           </div>
+           <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
+              <div className="w-10 h-10 rounded bg-blue-100 flex items-center justify-center text-blue-600"><FileText className="w-5 h-5" /></div>
+              <div className="flex-1 space-y-2">
+                 <div className="h-2 bg-gray-300 rounded w-2/3"></div>
+                 <div className="h-2 bg-gray-200 rounded w-1/2"></div>
+              </div>
+           </div>
         </div>
 
-        <div className="p-6 flex flex-col gap-5">
-            {/* Tabs */}
-            <div className="flex p-1.5 rounded-xl bg-gray-100/80">
-                {styles.map(style => (
-                    <button
-                        key={style}
-                        onClick={() => setActiveStyle(style)}
-                        className={clsx(
-                            "flex-1 py-2 text-sm font-semibold rounded-lg transition-all relative",
-                            activeStyle === style 
-                                ? "text-blue-600 shadow-sm bg-white" 
-                                : "text-gray-500 hover:text-gray-700"
-                        )}
-                    >
-                        {activeStyle === style && (
-                            <motion.div 
-                                layoutId="citation-tab-student"
-                                className="absolute inset-0 bg-white rounded-lg shadow-sm z-[-1]"
-                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                            />
-                        )}
-                        <span className="relative z-10">{style}</span>
-                    </button>
-                ))}
-            </div>
+        {/* The Authentic Popover Mockup */}
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-[420px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden relative z-10"
+        >
+          {/* Header */}
+          <div className="p-5 flex items-center justify-between border-b border-gray-100">
+              <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg bg-blue-50 text-blue-600">
+                      <Quote className="w-5 h-5 fill-current" />
+                  </div>
+                  <span className="font-bold text-base text-gray-900">Cite this article</span>
+              </div>
+              <button className="p-2 rounded-xl hover:bg-gray-100 text-gray-400">
+                  <X className="w-5 h-5" />
+              </button>
+          </div>
 
-            {/* Preview Box */}
-            <div className="p-5 rounded-xl border border-gray-200 bg-gray-50/50 text-base leading-relaxed font-serif text-gray-800 min-h-[120px]">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={activeStyle}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                    >
-                        {getCitation(activeStyle)}
-                    </motion.div>
-                </AnimatePresence>
-            </div>
+          <div className="p-6 flex flex-col gap-5">
+              {/* Tabs */}
+              <div className="flex p-1.5 rounded-xl bg-gray-100/80">
+                  {styles.map(style => (
+                      <button
+                          key={style}
+                          onClick={() => setActiveStyle(style)}
+                          className={clsx(
+                              "flex-1 py-2 text-sm font-semibold rounded-lg transition-all relative",
+                              activeStyle === style 
+                                  ? "text-blue-600 shadow-sm bg-white" 
+                                  : "text-gray-500 hover:text-gray-700"
+                          )}
+                      >
+                          {activeStyle === style && (
+                              <motion.div 
+                                  layoutId="citation-tab-student"
+                                  className="absolute inset-0 bg-white rounded-lg shadow-sm z-[-1]"
+                                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                              />
+                          )}
+                          <span className="relative z-10">{style}</span>
+                      </button>
+                  ))}
+              </div>
 
-            {/* Copy Button */}
-            <button
-                onClick={handleCopy}
-                className={clsx(
-                    "w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl text-base font-bold transition-all shadow-sm",
-                    isCopied 
-                        ? "bg-emerald-500 text-white shadow-emerald-500/20" 
-                        : "bg-gray-900 text-white hover:bg-gray-800"
-                )}
-            >
-                {isCopied ? (
-                    <>
-                        <Check className="w-5 h-5" />
-                        Copied to Clipboard
-                    </>
-                ) : (
-                    <>
-                        <Copy className="w-5 h-5" />
-                        Copy Citation
-                    </>
-                )}
-            </button>
-        </div>
-      </motion.div>
+              {/* Preview Box */}
+              <div className="p-5 rounded-xl border border-gray-200 bg-gray-50/50 text-base leading-relaxed font-serif text-gray-800 min-h-[120px]">
+                  <AnimatePresence mode="wait">
+                      <motion.div
+                          key={activeStyle}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                      >
+                          {getCitation(activeStyle)}
+                      </motion.div>
+                  </AnimatePresence>
+              </div>
+
+              {/* Copy Button */}
+              <button
+                  onClick={handleCopy}
+                  className={clsx(
+                      "w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl text-base font-bold transition-all shadow-sm",
+                      isCopied 
+                          ? "bg-emerald-500 text-white shadow-emerald-500/20" 
+                          : "bg-gray-900 text-white hover:bg-gray-800"
+                  )}
+              >
+                  {isCopied ? (
+                      <>
+                          <Check className="w-5 h-5" />
+                          Copied to Clipboard
+                      </>
+                  ) : (
+                      <>
+                          <Copy className="w-5 h-5" />
+                          Copy Citation
+                      </>
+                  )}
+              </button>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };

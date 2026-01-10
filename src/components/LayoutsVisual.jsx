@@ -97,7 +97,7 @@ const ListLayout = () => (
 
 export const LayoutsVisual = () => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
        {[
           { title: "Grid", icon: LayoutGrid, visual: GridLayout, desc: "Standard card view", color: "text-emerald-600", bg: "bg-emerald-50", border: "group-hover:border-emerald-200" },
           { title: "Moodboard", icon: ImageIcon, visual: MoodboardLayout, desc: "Masonry for visuals", color: "text-amber-600", bg: "bg-amber-50", border: "group-hover:border-amber-200" },

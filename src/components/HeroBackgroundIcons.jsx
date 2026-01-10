@@ -13,7 +13,7 @@ const FloatingIcon = ({ icon, className, delay, size = "32" }) => (
 
 export const HeroBackgroundIcons = () => {
   return (
-    <div className="absolute top-0 left-0 w-full h-[900px] z-0 pointer-events-none overflow-hidden">
+    <div className="hidden md:block absolute top-0 left-0 w-full h-[900px] z-0 pointer-events-none overflow-hidden">
        <div className="max-w-[1400px] mx-auto relative h-full w-full">
        {/* Left Side - Scattered */}
        <FloatingIcon 

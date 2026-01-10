@@ -28,7 +28,7 @@ const MockExtensionUI = () => {
       initial={{ y: 0 }}
       animate={{ y: [-8, 8, -8] }}
       transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      className="w-[360px] sm:w-[420px] bg-white rounded-2xl shadow-[0_30px_100px_-10px_rgba(0,0,0,0.1),0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-gray-200 font-sans relative mx-auto transform transition-transform duration-500 will-change-transform"
+      className="w-full max-w-[360px] sm:max-w-[420px] bg-white rounded-2xl shadow-[0_30px_100px_-10px_rgba(0,0,0,0.1),0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-gray-200 font-sans relative mx-auto transform transition-transform duration-500 will-change-transform"
     >
       <div className="rounded-2xl overflow-hidden">
         {/* Header */}

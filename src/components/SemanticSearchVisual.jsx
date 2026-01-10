@@ -102,7 +102,7 @@ export const SemanticSearchVisual = () => {
   }, [scenarioIndex]);
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-[#0F172A] rounded-2xl border border-indigo-500/20 shadow-2xl shadow-indigo-900/20 overflow-hidden font-sans relative min-h-[320px] flex flex-col">
+    <div className="w-full bg-[#0F172A] rounded-2xl border border-indigo-500/20 shadow-2xl shadow-indigo-900/20 overflow-hidden font-sans relative min-h-[320px] flex flex-col">
       {/* Glow Effect */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-50"></div>
       
@@ -113,32 +113,32 @@ export const SemanticSearchVisual = () => {
         </div>
         
         {/* Stable Text Container */}
-        <div className="flex-1 font-medium text-lg relative h-7 flex items-center overflow-hidden">
-           {/* Placeholder - Absolute to prevent layout shift */}
+        <div className="flex-1 font-medium text-lg relative h-[3.5rem]">
+           {/* Placeholder - Absolute */}
            <span 
              className={`text-slate-500 absolute inset-0 flex items-center transition-opacity duration-300 ${typedText ? 'opacity-0' : 'opacity-50'}`}
            >
              Ask AI anything...
            </span>
            
-           {/* Typing Text - Z-index to sit on top */}
-           <span className="text-slate-200 whitespace-nowrap z-10 flex items-center">
+           {/* Typing Text - Absolute to prevents layout push */}
+           <span className="text-slate-200 absolute inset-0 z-10 flex items-center whitespace-pre-wrap break-words leading-tight overflow-hidden">
               {typedText}
               {/* Custom Cursor - Only show when not finished results */}
               {phase !== 'results' && (
-                <span className="w-0.5 h-5 bg-indigo-400 ml-0.5 animate-pulse" />
+                <span className="w-0.5 h-5 bg-indigo-400 ml-0.5 animate-pulse inline-block align-middle" />
               )}
            </span>
         </div>
 
-        <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded bg-slate-800/50 border border-slate-700/50 text-[10px] text-slate-400 font-mono shrink-0">
+        <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded bg-slate-800/50 border border-slate-700/50 text-[10px] text-slate-400 font-mono shrink-0 self-start mt-1">
            <Command className="w-3 h-3" />
            <span>K</span>
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="p-2 flex-1 bg-slate-900/30 relative">
+      {/* Content Area - Fixed Height to prevent jumping */}
+      <div className="p-2 h-[240px] bg-slate-900/30 relative overflow-y-auto overflow-x-hidden no-scrollbar">
          <AnimatePresence mode="wait">
             
             {/* Thinking State */}
@@ -184,21 +184,21 @@ export const SemanticSearchVisual = () => {
                         hidden: { opacity: 0, y: 10 },
                         show: { opacity: 1, y: 0 }
                       }}
-                      className="group flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 cursor-pointer transition-colors border border-transparent hover:border-white/5"
+                      className="group flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 cursor-pointer transition-colors border border-transparent hover:border-white/5 w-full max-w-full"
                     >
                        <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-indigo-400 transition-colors shrink-0">
                           <currentScenario.icon className="w-4 h-4" />
                        </div>
-                       <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-0.5">
-                             <span className="text-sm font-medium text-slate-200 truncate pr-2">{item.title}</span>
-                             <span className="text-[10px] text-slate-500 whitespace-nowrap">{item.date}</span>
+                       <div className="flex-1 min-w-0 grid">
+                          <div className="flex items-center justify-between mb-0.5 w-full">
+                             <span className="text-sm font-medium text-slate-200 truncate pr-2 max-w-full">{item.title}</span>
+                             <span className="text-[10px] text-slate-500 whitespace-nowrap hidden sm:block">{item.date}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                             <div className="h-1 flex-1 bg-slate-800 rounded-full overflow-hidden max-w-[60px]">
+                             <div className="h-1 flex-1 bg-slate-800 rounded-full overflow-hidden max-w-[60px] min-w-[40px]">
                                 <div className="h-full bg-indigo-500" style={{ width: item.match }}></div>
                              </div>
-                             <span className="text-[10px] text-indigo-400 font-medium">{item.match} Match</span>
+                             <span className="text-[10px] text-indigo-400 font-medium whitespace-nowrap">{item.match} Match</span>
                           </div>
                        </div>
                        <ArrowRight className="w-4 h-4 text-slate-600 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all shrink-0" />

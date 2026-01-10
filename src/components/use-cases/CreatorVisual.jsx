@@ -4,13 +4,23 @@ import { Youtube, Palette, Hash, Image as ImageIcon } from 'lucide-react';
 
 export const CreatorVisual = () => {
   return (
-    <div className="w-full h-full min-h-[350px] relative overflow-hidden flex flex-col items-center justify-center p-6 bg-amber-50/30">
+    <div className="w-full h-full min-h-[350px] relative overflow-hidden flex flex-col items-center justify-center p-2 sm:p-6 bg-amber-50/30">
       
+      {/* Mobile Simplified View */}
+      <div className="sm:hidden flex flex-col items-center justify-center gap-4 text-center">
+         <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-amber-200 flex items-center justify-center text-amber-600">
+            <Palette className="w-10 h-10" />
+         </div>
+         <p className="text-sm font-medium text-amber-700/60 max-w-[200px]">Organize your inspiration</p>
+      </div>
+
+      {/* Desktop Complex View */}
+      <div className="hidden sm:flex flex-col w-full h-full items-center justify-center relative z-10">
       {/* Background Decor */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent"></div>
 
       {/* Main Container - Moodboard UI */}
-      <div className="w-full max-w-[480px] grid grid-cols-2 gap-4 relative z-10 scale-105">
+      <div className="w-full max-w-[480px] grid grid-cols-2 gap-4 relative z-10">
          
          {/* Card 1: Video */}
          <motion.div 
@@ -85,6 +95,7 @@ export const CreatorVisual = () => {
          <Hash className="w-4 h-4" />
          <span className="text-sm font-black tracking-tight uppercase">Moodboard</span>
       </motion.div>
+      </div>
     </div>
   );
 };

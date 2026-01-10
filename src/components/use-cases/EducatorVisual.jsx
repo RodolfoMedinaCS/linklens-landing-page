@@ -4,8 +4,18 @@ import { Globe, Users, Share2, FileText, Youtube, Check, Copy } from 'lucide-rea
 
 export const EducatorVisual = () => {
   return (
-    <div className="w-full h-full min-h-[350px] relative overflow-hidden flex flex-col items-center justify-center p-6 bg-sky-50/30">
+    <div className="w-full h-full min-h-[350px] relative overflow-hidden flex flex-col items-center justify-center p-2 sm:p-6 bg-sky-50/30">
       
+      {/* Mobile Simplified View */}
+      <div className="sm:hidden flex flex-col items-center justify-center gap-4 text-center">
+         <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-sky-200 flex items-center justify-center text-sky-600">
+            <Users className="w-10 h-10" />
+         </div>
+         <p className="text-sm font-medium text-sky-700/60 max-w-[200px]">Share with your class instantly</p>
+      </div>
+
+      {/* Desktop Complex View */}
+      <div className="hidden sm:flex flex-col w-full h-full items-center justify-center relative z-10">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#0ea5e9_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
@@ -14,7 +24,7 @@ export const EducatorVisual = () => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-[450px] bg-white rounded-3xl shadow-2xl border border-sky-100 overflow-hidden relative z-10 scale-105"
+        className="w-full max-w-[450px] bg-white rounded-3xl shadow-2xl border border-sky-100 overflow-hidden relative z-10"
       >
         {/* Collection Header */}
         <div className="p-6 border-b border-sky-50 bg-sky-50/20">
@@ -71,6 +81,7 @@ export const EducatorVisual = () => {
            </div>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

@@ -24,7 +24,11 @@ export const DiscoveryVisual = () => {
 
        {/* Connecting Lines (Spaghetti Wires) */}
        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[120px] pointer-events-none">
-          <svg className="absolute top-0 left-0 w-full h-full overflow-visible">
+          {/* Mobile Vertical Line */}
+          <div className="md:hidden absolute left-1/2 top-0 bottom-0 w-px bg-emerald-500/20 -translate-x-1/2 border-l border-dashed border-emerald-500/30"></div>
+
+          {/* Desktop SVG Graph */}
+          <svg className="hidden md:block absolute top-0 left-0 w-full h-full overflow-visible" viewBox="0 0 512 120" preserveAspectRatio="none">
              {/* Left Connection */}
              {/* Base faint line */}
              <path 
@@ -87,7 +91,7 @@ export const DiscoveryVisual = () => {
        </div>
 
        {/* Connected Nodes */}
-       <div className="flex justify-between w-full relative z-10 gap-4">
+       <div className="flex flex-col md:flex-row justify-between w-full relative z-10 gap-4">
           
           {/* Node 1 */}
           <motion.div 

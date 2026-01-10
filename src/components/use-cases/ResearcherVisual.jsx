@@ -4,12 +4,22 @@ import { Search, FileText, Sparkles } from 'lucide-react';
 
 export const ResearcherVisual = () => {
   return (
-    <div className="w-full h-full min-h-[350px] relative overflow-hidden flex items-center justify-center p-4 bg-violet-50/30">
+    <div className="w-full h-full min-h-[350px] relative overflow-hidden flex items-center justify-center p-2 sm:p-4 bg-violet-50/30">
       
+      {/* Mobile Simplified View */}
+      <div className="sm:hidden flex flex-col items-center justify-center gap-4 text-center">
+         <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-violet-200 flex items-center justify-center text-violet-600">
+            <Search className="w-10 h-10" />
+         </div>
+         <p className="text-sm font-medium text-violet-700/60 max-w-[200px]">Find connections instantly</p>
+      </div>
+
+      {/* Desktop Complex View */}
+      <div className="hidden sm:flex flex-col w-full h-full items-center justify-center relative z-10">
       {/* Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.05)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
-      <div className="relative w-full max-w-[500px] h-[320px] scale-90 sm:scale-100">
+      <div className="relative w-full max-w-[500px] h-[320px] scale-[0.70] sm:scale-100">
          
          {/* Center Node (Source) */}
          <motion.div 
@@ -121,6 +131,7 @@ export const ResearcherVisual = () => {
             </div>
          </motion.div>
 
+      </div>
       </div>
     </div>
   );

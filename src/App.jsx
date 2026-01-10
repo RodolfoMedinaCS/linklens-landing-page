@@ -311,7 +311,7 @@ function App() {
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
             }}
-            className="text-base sm:text-lg md:text-xl text-gray-600 max-w-xl md:max-w-2xl mb-8 md:mb-10 font-normal leading-relaxed px-2"
+            className="text-sm sm:text-lg md:text-xl text-gray-600 max-w-xl md:max-w-2xl mb-6 md:mb-10 font-normal leading-relaxed px-2"
           >
             LinkLens is the modern bookmark manager for students and researchers.
             Save links in one click, organize them in beautiful collections, and
@@ -323,7 +323,7 @@ function App() {
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
             }}
-            className="flex flex-col items-center gap-6 mb-12 md:mb-16 w-full max-w-md mx-auto px-2"
+            className="flex flex-col items-center gap-4 md:gap-6 mb-12 md:mb-16 w-full max-w-md mx-auto px-2"
           >
             {SITE_MODE === 'waitlist' ? (
               <>
@@ -347,7 +347,7 @@ function App() {
                       required
                       placeholder="Enter your email" 
                       disabled={subscribeStatus === 'loading'}
-                      className="flex-1 bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-transparent block w-full p-3.5 md:p-4 shadow-sm placeholder-gray-400 outline-none transition-all disabled:opacity-50"
+                      className="flex-1 bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-transparent block w-full p-3 md:p-4 shadow-sm placeholder-gray-400 outline-none transition-all disabled:opacity-50"
                     />
                     {/* Bot protection */}
                     <div style={{ position: 'absolute', left: '-5000px' }} aria-hidden="true">
@@ -356,7 +356,7 @@ function App() {
                     <button 
                       type="submit" 
                       disabled={subscribeStatus === 'loading'}
-                      className="bg-gray-900 text-white px-8 py-4 rounded-xl font-medium shadow-xl shadow-gray-900/20 hover:bg-gray-800 transition-all whitespace-nowrap active:scale-95 disabled:opacity-70 disabled:cursor-wait flex items-center justify-center min-w-[140px] cursor-pointer"
+                      className="bg-gray-900 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl font-medium shadow-xl shadow-gray-900/20 hover:bg-gray-800 transition-all whitespace-nowrap active:scale-95 disabled:opacity-70 disabled:cursor-wait flex items-center justify-center min-w-[140px] cursor-pointer"
                     >
                       {subscribeStatus === 'loading' ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -401,17 +401,23 @@ function App() {
               <div className="absolute -inset-4 bg-[linear-gradient(to_right,#A7F3D0,#BAE6FD,#DDD6FE,#FDE68A)] rounded-2xl opacity-20 blur-2xl group-hover:opacity-30 transition-opacity duration-700"></div>
               
               <div className="relative bg-white rounded-[12.5px] overflow-hidden h-full">
-                <div className="bg-gray-50/80 border-b border-gray-200 px-4 py-3 flex items-center gap-4 backdrop-blur-sm">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-400/80 border border-red-500/50"></div>
-                    <div className="w-3 h-3 rounded-full bg-amber-400/80 border border-amber-500/50"></div>
-                    <div className="w-3 h-3 rounded-full bg-emerald-400/80 border border-emerald-500/50"></div>
+                <div className="bg-gray-50/80 border-b border-gray-200 px-3 py-2 md:px-4 md:py-3 flex items-center gap-4 backdrop-blur-sm">
+                  <div className="flex gap-1.5 md:gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-400/80 border border-red-500/50"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80 border border-amber-500/50"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80 border border-emerald-500/50"></div>
                   </div>
                   <div className="flex-1 flex justify-center">
-                    <div className="bg-white border border-gray-200 text-gray-400 text-xs py-1.5 px-32 rounded-md flex items-center gap-2 shadow-sm">
-                      <iconify-icon icon="solar:lock-keyhole-minimalistic-bold" className="text-gray-300"></iconify-icon>
+                    <div className="bg-white border border-gray-200 text-gray-400 text-[10px] md:text-xs py-1 px-4 md:px-24 rounded-md flex items-center justify-center gap-2 shadow-sm w-full max-w-[180px] md:max-w-[320px]">
+                      <iconify-icon icon="solar:lock-keyhole-minimalistic-bold" className="text-gray-300 text-[10px]"></iconify-icon>
                       app.linklens.ai
                     </div>
+                  </div>
+                  {/* Spacer to balance the traffic lights */}
+                  <div className="flex gap-1.5 opacity-0 pointer-events-none hidden md:flex">
+                    <div className="w-2.5 h-2.5 rounded-full"></div>
+                    <div className="w-2.5 h-2.5 rounded-full"></div>
+                    <div className="w-2.5 h-2.5 rounded-full"></div>
                   </div>
                 </div>
                 <div className="w-full bg-gray-50 flex flex-col items-center justify-center overflow-hidden">
@@ -430,7 +436,7 @@ function App() {
         <section id="features" className="w-full py-20 px-6 border-b border-gray-100 bg-white">
           <div className="max-w-6xl mx-auto">
             <RevealOnScroll width="100%">
-            <div className="grid md:grid-cols-3 gap-12 text-center md:text-left">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
               {/* Pillar 1: Save */}
               <div className="flex flex-col md:flex-row gap-5 items-center md:items-start group">
                 <div className="w-14 h-14 rounded-2xl bg-[#A7F3D0]/30 text-emerald-700 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
@@ -475,7 +481,7 @@ function App() {
         </section>
 
         {/* SECTION 3: SAVE (CHROME EXTENSION) */}
-        <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-white relative overflow-hidden">
+        <section className="w-full py-24 md:py-32 px-6 md:px-12 bg-white relative">
            <div className="max-w-7xl mx-auto relative z-10">
              <RevealOnScroll width="100%">
              <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -663,7 +669,7 @@ function App() {
               <div className="grid md:grid-cols-2 gap-12">
                  {/* Feature 1: Semantic Search */}
                  <RevealOnScroll width="100%" delay={0.2} className="h-full">
-                 <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors h-full flex flex-col">
+                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-8 hover:bg-white/10 transition-colors h-full flex flex-col overflow-hidden">
                     <div className="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center mb-6">
                        <Search className="w-6 h-6 stroke-[2]" />
                     </div>
@@ -905,7 +911,7 @@ function App() {
 
             {/* Tabs */}
             <div className="flex justify-center mb-12">
-              <div className="inline-flex flex-wrap justify-center gap-2 p-1.5 bg-gray-100/80 rounded-2xl border border-gray-200/50">
+              <div className="inline-flex flex-nowrap overflow-x-auto no-scrollbar max-w-full justify-start md:justify-center gap-2 p-1.5 bg-gray-100/80 rounded-2xl border border-gray-200/50">
                 {[
                   { id: "students", label: "Students", icon: GraduationCap, color: "text-emerald-600" },
                   { id: "researchers", label: "Researchers", icon: Microscope, color: "text-violet-600" },
@@ -937,10 +943,28 @@ function App() {
                   'bg-amber-300'
                }`}></div>
 
-              <div className="grid md:grid-cols-2 gap-12 p-8 md:p-16 relative z-10">
+              <div className="grid md:grid-cols-2 gap-12 p-6 sm:p-8 md:p-16 relative z-10">
                 {/* Text Content */}
                 <div className="flex flex-col justify-center gap-6">
                   <div>
+                    {/* Mobile/Desktop Icon Badge */}
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${
+                      activeTab === 'students' ? 'bg-emerald-100 text-emerald-600' :
+                      activeTab === 'researchers' ? 'bg-violet-100 text-violet-600' :
+                      activeTab === 'educators' ? 'bg-sky-100 text-sky-600' :
+                      'bg-amber-100 text-amber-600'
+                    }`}>
+                       {(() => {
+                          const Icon = {
+                            students: GraduationCap,
+                            researchers: Microscope,
+                            educators: BookOpen,
+                            creators: Zap
+                          }[activeTab];
+                          return <Icon className="w-7 h-7" />;
+                       })()}
+                    </div>
+
                     <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                       {tabContent[activeTab].headline}
                     </h3>
@@ -972,8 +996,8 @@ function App() {
                   </div>
                 </div>
 
-                {/* Visual Side */}
-                <div className="rounded-2xl border border-gray-100 bg-gray-50/50 overflow-hidden min-h-[300px] md:min-h-[400px] relative">
+                {/* Visual Side - Hidden on Mobile */}
+                <div className="hidden lg:block rounded-2xl border border-gray-100 bg-gray-50/50 overflow-hidden min-h-[300px] md:min-h-[400px] relative">
                    {activeTab === 'students' ? (
                       <StudentVisual />
                    ) : activeTab === 'researchers' ? (
@@ -1015,13 +1039,13 @@ function App() {
             </div>
 
             {/* Bottom Checklist */}
-            <div className="flex flex-wrap justify-center gap-x-12 gap-y-4 mt-16">
+            <div className="flex flex-wrap justify-center gap-x-6 md:gap-x-12 gap-y-4 mt-16">
               {['Cloud Sync', 'Chrome Extension', 'Privacy First', 'Data Export'].map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-2.5">
-                  <div className="w-5 h-5 rounded-md bg-gray-900 flex items-center justify-center text-white shadow-sm">
-                    <Check className="w-3 h-3 stroke-[3]" />
+                <div key={idx} className="flex items-center gap-2 md:gap-2.5">
+                  <div className="w-4 h-4 md:w-5 md:h-5 rounded bg-gray-900 flex items-center justify-center text-white shadow-sm">
+                    <Check className="w-2.5 h-2.5 md:w-3 md:h-3 stroke-[3]" />
                   </div>
-                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                  <span className="text-[10px] md:text-sm font-semibold text-gray-700 uppercase tracking-wide">
                     {feature}
                   </span>
                 </div>

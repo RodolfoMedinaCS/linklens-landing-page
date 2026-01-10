@@ -31,7 +31,17 @@ const FEATURES = [
 const DistractionFreeVisual = () => {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
+  // Mobile auto-toggle state
+  const [isMobileClean, setIsMobileClean] = useState(true);
   const containerRef = React.useRef(null);
+
+  // Mobile Auto-Cycle Logic
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsMobileClean(prev => !prev);
+    }, 3000); // Toggle every 3 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   const handleStart = (e) => {
     setIsDragging(true);
@@ -76,60 +86,106 @@ const DistractionFreeVisual = () => {
   }, [isDragging, handleMove]);
 
   return (
-    <div 
-      className={clsx(
-        "relative w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 select-none group touch-none",
-        isDragging ? "cursor-grabbing" : "cursor-col-resize"
-      )}
-      ref={containerRef}
-      onMouseDown={handleStart}
-      onTouchStart={handleStart}
-    >
-      {/* 1. Background Layer: Clean Reader (Visible on Right) */}
-      <div className="absolute inset-0 overflow-hidden">
-        <img 
-          src="/reader-clean.png" 
-          alt="LinkLens Reader View" 
-          className="w-full h-full object-cover object-top"
-        />
+    <>
+      {/* Mobile: Auto-Cycle Before/After (Dynamic Loop) */}
+      <div className="md:hidden relative w-full aspect-[3/4] bg-gray-50 border border-gray-200 rounded-xl overflow-hidden">
+         <AnimatePresence mode='popLayout'>
+            {isMobileClean ? (
+               <motion.div
+                  key="clean"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="absolute inset-0"
+               >
+                  <img 
+                     src="/reader-clean.png" 
+                     alt="LinkLens Reader View" 
+                     className="w-full h-full object-cover object-top"
+                  />
+                  <div className="absolute bottom-3 right-3 bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold shadow-sm z-10">
+                     Reader View
+                  </div>
+               </motion.div>
+            ) : (
+               <motion.div
+                  key="cluttered"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="absolute inset-0"
+               >
+                  <img 
+                     src="/reader-cluttered.png" 
+                     alt="Original Webpage" 
+                     className="w-full h-full object-cover object-top"
+                  />
+                  <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-gray-500 border border-gray-200 px-3 py-1 rounded-full text-xs font-bold shadow-sm z-10">
+                     Original Page
+                  </div>
+               </motion.div>
+            )}
+         </AnimatePresence>
       </div>
 
-      {/* 2. Foreground Layer: Cluttered Ads (Visible on Left) */}
+      {/* Desktop: Interactive Slider */}
       <div 
-        className="absolute inset-0 bg-white"
-        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+        className={clsx(
+          "hidden md:block relative w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 select-none group touch-none",
+          isDragging ? "cursor-grabbing" : "cursor-col-resize"
+        )}
+        ref={containerRef}
+        onMouseDown={handleStart}
+        onTouchStart={handleStart}
       >
-         <img 
-            src="/reader-cluttered.png" 
-            alt="Original Webpage with Clutter" 
-            className="w-full h-full object-cover object-top"
-         />
-      </div>
+        {/* 1. Background Layer: Clean Reader (Visible on Right) */}
+        <div className="absolute inset-0 overflow-hidden bg-gray-50 flex items-start justify-center">
+          <img 
+            src="/reader-clean.png" 
+            alt="LinkLens Reader View" 
+            className="w-full h-full object-contain object-top"
+          />
+        </div>
 
-      {/* 3. The Physical Divider & Handle (Floating on Top) */}
-      <div 
-        className="absolute inset-y-0 z-30"
-        style={{ left: `${sliderPosition}%` }}
-      >
-         {/* The Black Line */}
-         <div className="absolute inset-y-0 -ml-[1px] w-[2px] bg-black"></div>
+        {/* 2. Foreground Layer: Cluttered Ads (Visible on Left) */}
+        <div 
+          className="absolute inset-0 bg-white"
+          style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+        >
+           <img 
+              src="/reader-cluttered.png" 
+              alt="Original Webpage with Clutter" 
+              className="w-full h-full object-contain object-top"
+           />
+        </div>
 
-         {/* The Handle */}
-         <div className={clsx(
-            "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 bg-black rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.4)] flex items-center justify-center text-white transition-transform",
-            isDragging ? "scale-110" : "group-hover:scale-105"
-         )}>
-            <div className="flex items-center gap-1">
-               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                 <path d="M5 1L1 5L5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-               </svg>
-               <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                 <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-               </svg>
-            </div>
-         </div>
+        {/* 3. The Physical Divider & Handle (Floating on Top) */}
+        <div 
+          className="absolute inset-y-0 z-30"
+          style={{ left: `${sliderPosition}%` }}
+        >
+           {/* The Black Line */}
+           <div className="absolute inset-y-0 -ml-[1px] w-[2px] bg-black"></div>
+
+           {/* The Handle */}
+           <div className={clsx(
+              "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 bg-black rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.4)] flex items-center justify-center text-white transition-transform",
+              isDragging ? "scale-110" : "group-hover:scale-105"
+           )}>
+              <div className="flex items-center gap-1">
+                 <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M5 1L1 5L5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                 </svg>
+                 <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                 </svg>
+              </div>
+           </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -277,7 +333,7 @@ const HighlightsVisual = () => {
 
   return (
     <div className="w-full h-full bg-white rounded-xl overflow-hidden border border-gray-200 relative bg-[#FBFBFB] flex flex-col font-sans min-h-0">
-       {/* Fake Browser/Reader Header to sell the 'Mode' */}
+       {/* Fake Browser/Reader Header */}
        <div className="h-12 border-b border-gray-200 bg-white flex items-center px-4 justify-between shrink-0">
           <div className="flex gap-2">
              <div className="w-3 h-3 rounded-full bg-gray-200"></div>
@@ -287,7 +343,45 @@ const HighlightsVisual = () => {
           <div className="w-4"></div> 
        </div>
 
-       <div className="flex-1 overflow-y-auto bg-white p-8 md:p-10">
+       {/* MOBILE VIEW (Static, Simple) */}
+       <div className="lg:hidden flex-1 overflow-y-auto bg-white p-6">
+          <div className="max-w-2xl mx-auto prose prose-sm select-none">
+            <span className="block text-xs font-semibold text-indigo-600 mb-1 uppercase tracking-wide">Technology</span>
+            <h1 className="text-2xl font-serif font-bold text-gray-900 mb-4 leading-tight">AI—The good, the bad, and the scary</h1>
+            
+            <div className="flex items-center gap-3 text-xs text-gray-500 mb-6 border-b border-gray-100 pb-6">
+                <span className="font-medium text-gray-900">Virginia Tech</span>
+                <span>•</span>
+                <span>2 min read</span>
+            </div>
+
+            <p className="mb-4 text-gray-700 leading-relaxed">
+               There is no denying that Artificial Intelligence has changed our lives.
+            </p>
+
+            <div className="mb-4 text-gray-700 leading-relaxed relative">
+               <span className="bg-[#fef08a] rounded px-0.5 box-decoration-clone">
+                  A recent survey by Forbes indicated that many Americans still trust humans over AI by a large percentage.
+               </span>
+               
+               {/* Mobile Static Note */}
+               <div className="mt-3 p-3 rounded-lg border border-yellow-200 bg-yellow-50 flex gap-2.5">
+                  <div className="w-1 h-full bg-yellow-400 rounded-full shrink-0"></div>
+                  <div className="text-xs text-gray-700">
+                     <span className="font-bold text-gray-900 block mb-0.5">Note</span>
+                     Useful stat for the introduction.
+                  </div>
+               </div>
+            </div>
+
+            <p className="mb-4 text-gray-700 leading-relaxed">
+               Those surveyed shared that they think people would do a better job of administering medicine and choosing gifts.
+            </p>
+          </div>
+       </div>
+
+       {/* DESKTOP VIEW (Animated, Complex) */}
+       <div className="hidden lg:block flex-1 overflow-y-auto bg-white p-8 md:p-10">
           <div className="max-w-2xl mx-auto prose prose-slate select-none">
             <span className="block text-sm font-semibold text-indigo-600 mb-2 uppercase tracking-wide">Technology</span>
             <h1 className="text-3xl font-serif font-bold text-gray-900 mb-6 leading-tight">AI—The good, the bad, and the scary</h1>
@@ -439,11 +533,42 @@ export const ReaderModeSpotlightV2 = memo(() => {
   const [activeFeature, setActiveFeature] = useState('distraction');
 
   return (
-    // Fixed Height Container (600px)
-    <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 h-[600px]">
+    // Fixed Height Container (600px on desktop, auto on mobile)
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 h-auto lg:h-[600px]">
        
-       {/* Left Column: Navigation (Flex 1 to stretch) */}
-       <div className="lg:col-span-4 flex flex-col gap-3 h-full">
+       {/* MOBILE ONLY: Horizontal Tabs */}
+       <div className="flex lg:hidden overflow-x-auto gap-3 pb-2 no-scrollbar">
+          {FEATURES.map((feature) => {
+             const isActive = activeFeature === feature.id;
+             const Icon = feature.icon;
+             
+             // Simple active state for tabs
+             const activeClasses = {
+                distraction: 'bg-violet-100 text-violet-700 border-violet-200',
+                citation: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                highlights: 'bg-amber-100 text-amber-700 border-amber-200'
+             };
+
+             return (
+                <button
+                   key={feature.id}
+                   onClick={() => setActiveFeature(feature.id)}
+                   className={clsx(
+                      "flex items-center gap-2 px-4 py-2.5 rounded-full border whitespace-nowrap text-sm font-medium transition-all",
+                      isActive 
+                        ? activeClasses[feature.id] 
+                        : "bg-white border-gray-200 text-gray-600"
+                   )}
+                >
+                   <Icon className="w-4 h-4" />
+                   {feature.title}
+                </button>
+             );
+          })}
+       </div>
+
+       {/* DESKTOP ONLY: Vertical Navigation (Left Column) */}
+       <div className="hidden lg:flex col-span-4 flex-col gap-4 h-full">
           {FEATURES.map((feature) => {
              const isActive = activeFeature === feature.id;
              const Icon = feature.icon;
@@ -495,7 +620,7 @@ export const ReaderModeSpotlightV2 = memo(() => {
        </div>
 
        {/* Right Column: Visual Display */}
-       <div className="lg:col-span-8 h-full">
+       <div className="lg:col-span-8 h-auto lg:h-full">
           <div className="h-full">
              {activeFeature === 'distraction' && <DistractionFreeVisual />}
              {activeFeature === 'citation' && <CitationVisual />}
